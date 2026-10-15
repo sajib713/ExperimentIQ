@@ -7,3 +7,7 @@ The report generator is implemented in `src/experimentiq/report.py`. It will wri
 The real memo will include business question, source SHA/provenance, assigned sample size per arm, conversion / visit / spend KPIs, Newcombe intervals, Holm-adjusted p-values, SRM, spend bootstrap intervals, guarded recommendations, missing business inputs and limits.
 
 To generate: `python -m experimentiq.cli all`. **Do not take business action based on an absent or synthetic analysis.**
+
+**Optional UI demo:** `python -m experimentiq.cli demo` generates 900 **SYNTHETIC, FABRICATED** rows. See `data/synthetic/README.md`. Do not cite the invented treatment effects.
+
+**GitHub publishing:** connector write calls currently fail HTTP 403 (installation absent). Local Git commit only; no remote push claimed.

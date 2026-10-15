@@ -2,7 +2,7 @@
 
 **Production-oriented portfolio code for analytics of the Hillstrom MineThatData Email Challenge**: reproducible processing, declarative SQL KPIs, randomized-inference decision engine, honest gross-spend impact analysis, a local interactive dashboard, Power BI authoring assets, and automated tests.
 
-> **CURRENT BUILD STATUS — PARTIALLY COMPLETE / DATA BLOCKED (34 fixture-based tests passed, 1 live PostgreSQL test skipped).** The initial execution sandbox had no outbound DNS/network to download Hillstrom CSV, no PostgreSQL/Docker server and no Windows Power BI Desktop. Therefore **no actual experimental findings, verified PostgreSQL integration or Power BI binary are claimed**. Synthetic fixture tests are exclusively unit tests, not real Hillstrom results. See `docs/FINAL_AUDIT.md`.
+> **CURRENT BUILD STATUS — PARTIALLY COMPLETE / DATA BLOCKED (fixture-based tests pass; live PostgreSQL test skipped (see local run log)).** The initial execution sandbox had no outbound DNS/network to download Hillstrom CSV, no PostgreSQL/Docker server and no Windows Power BI Desktop. Therefore **no actual experimental findings, verified PostgreSQL integration or Power BI binary are claimed**. Synthetic fixture tests are exclusively unit tests, not real Hillstrom results. See `docs/FINAL_AUDIT.md`.
 
 ## Why this is more than a notebook
 
@@ -34,6 +34,16 @@ python -m http.server 8000 -d dashboard       # open http://localhost:8000
 ```
 
 **Existing raw file policy:** Acquisition refuses to overwrite. If you manually download, place the exact original source as `data/raw/hillstrom.csv`, then run `profile` and `all`. Manual source provenance will remain *unverified* unless you independently record/verify source metadata. No sample data are automatically substituted.
+
+## Optional synthetic demonstration (NOT Hillstrom data)
+
+```bash
+python -m experimentiq.cli demo
+python -m http.server 8000 -d dashboard
+# Open http://localhost:8000/?demo=1
+```
+
+The synthetic output is deliberately separate from all real-data paths. It is generated only for testing the software/UI; simulated metrics **must never** be interpreted as real experimental results. See `data/synthetic/README.md`.
 
 ## Optional PostgreSQL integration
 
@@ -81,6 +91,7 @@ ExperimentIQ/
 | `... all` | all offline local analysis steps and report assets |
 | `... load-db` | load validated processed CSV into PostgreSQL with one commit |
 | `... verify-db` | actual server-side KPI reconciliation vs Python |
+| `... demo` | Generate labeled, reproducible synthetic CSV and isolated dashboard demo JSON |
 
 See [`docs/RELEASE_HARDENING.md`](docs/RELEASE_HARDENING.md), [`docs/KPI_SPEC.md`](docs/KPI_SPEC.md) and [`docs/STATISTICAL_METHOD.md`](docs/STATISTICAL_METHOD.md) before interpreting any difference. If data license/provenance are disputed, remove generated external distributions. The MIT license applies to project code only.
 

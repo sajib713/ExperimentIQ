@@ -17,3 +17,6 @@ reports/*_actual.*
 reports/profile_actual.json
 reports/analysis_actual.json
 dashboard/data/report.json
+
+# Synthetic dashboard output generated locally
+dashboard/data/demo.json

@@ -12,10 +12,13 @@ def main(argv=None):
     sp=p.add_subparsers(dest='cmd',required=True)
     a=sp.add_parser('acquire');a.add_argument('--mirror',action='store_true');a.add_argument('--source',default=None)
     sp.add_parser('profile');sp.add_parser('pipeline');sp.add_parser('analyze');sp.add_parser('all')
-    sp.add_parser('load-db');sp.add_parser('verify-db')
+    sp.add_parser('load-db');sp.add_parser('verify-db');sp.add_parser('demo')
     args=p.parse_args(argv)
     try:
-        if args.cmd=='acquire': result=acquire(source=args.source,use_mirror=args.mirror)
+        if args.cmd=='demo':
+            from .demo import make_demo
+            result=make_demo()
+        elif args.cmd=='acquire': result=acquire(source=args.source,use_mirror=args.mirror)
         elif args.cmd=='profile':
             from .data import validate_raw,sha256
             raw=load_raw()
