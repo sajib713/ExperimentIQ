@@ -1,0 +1,46 @@
+name: Publish exact ExperimentIQ local history
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-master.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout private bootstrap
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Validate exact-history bundle and guard the remote
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 --decode .import/experimentiq-history.bundle.b64 > "$RUNNER_TEMP/experimentiq.bundle"
+          echo "5687639fc324f5823c885d172086bb21300909dd81870252298e3863c0fa8e9f  $RUNNER_TEMP/experimentiq.bundle" | sha256sum -c -
+          git bundle verify "$RUNNER_TEMP/experimentiq.bundle"
+          if git ls-remote --exit-code --heads origin refs/heads/master >/dev/null 2>&1; then
+            echo "::error::The master branch already exists. Refusing to overwrite any remote work."
+            exit 1
+          fi
+
+      - name: Publish exact local commits to a new master branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch "$RUNNER_TEMP/experimentiq.bundle" "refs/heads/master:refs/remotes/local-import/master"
+          expected_sha="6145ea9f53f1b1ece7f4efa5ccd7f9a6f864a36b"
+          actual_sha="$(git rev-parse refs/remotes/local-import/master)"
+          test "$actual_sha" = "$expected_sha"
+          git push origin refs/remotes/local-import/master:refs/heads/master
+          remote_sha="$(git ls-remote origin refs/heads/master | cut -f1)"
+          test "$remote_sha" = "$expected_sha"
+          echo "Verified remote master: $remote_sha" >> "$GITHUB_STEP_SUMMARY"
