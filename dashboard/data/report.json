@@ -1,0 +1,1349 @@
+{
+  "metadata": {
+    "source_sha256": "27bab8c5d3669f26ec08ebb50a0a78317542f29501156f2e2af6781fab4cd7e2",
+    "observed_sample": 64000,
+    "warning": "Exploratory subgroups; ITT assignment effect, not delivered-email impact or ROI."
+  },
+  "analysis": {
+    "n": 64000,
+    "groups": {
+      "No E-Mail": {
+        "assigned": 21306,
+        "conversions": 122,
+        "visits": 2262,
+        "spend_total": 13908.33,
+        "conversion_rate": 0.005726086548390125,
+        "visit_rate": 0.10616727682343002,
+        "spend_per_assigned": 0.6527893551112361,
+        "conversion_ci95_wilson": [
+          0.00479820584596141,
+          0.006832169692008918
+        ]
+      },
+      "Mens E-Mail": {
+        "assigned": 21307,
+        "conversions": 267,
+        "visits": 3894,
+        "spend_total": 30311.69,
+        "conversion_rate": 0.01253109306800582,
+        "visit_rate": 0.18275684047496127,
+        "spend_per_assigned": 1.422616511005773,
+        "conversion_ci95_wilson": [
+          0.011122885010307802,
+          0.014115041885257276
+        ]
+      },
+      "Womens E-Mail": {
+        "assigned": 21387,
+        "conversions": 189,
+        "visits": 3238,
+        "spend_total": 23038.11,
+        "conversion_rate": 0.008837144059475383,
+        "visit_rate": 0.151400383410483,
+        "spend_per_assigned": 1.0772015710478329,
+        "conversion_ci95_wilson": [
+          0.007668063369361126,
+          0.010182635003387489
+        ]
+      }
+    },
+    "srm": {
+      "chi_square": 0.20253125000000002,
+      "p_value": 0.9036929575604196,
+      "threshold": 0.001,
+      "flag": false,
+      "expected_per_arm": 21333.333333333332,
+      "assumption": "Equal 1:1:1 intended random allocation, not guaranteed exact counts"
+    },
+    "baseline_balance": {
+      "standardized_mean_differences_vs_control": {
+        "Mens E-Mail": {
+          "recency": 0.006831532454259954,
+          "history": 0.00761286832154239,
+          "mens": -0.0045823256374879625,
+          "womens": 0.007588929691887142,
+          "newbie": -0.0008918953696535328
+        },
+        "Womens E-Mail": {
+          "recency": 0.005180013205688683,
+          "history": 0.006510722458553667,
+          "mens": -0.008630731202832915,
+          "womens": 0.004946313992582152,
+          "newbie": 0.0025567009140795606
+        }
+      },
+      "categorical_independence_tests": {
+        "zip_code": {
+          "chi_square": 2.8719422089251405,
+          "p_value": 0.5794791381657298,
+          "dof": 4
+        },
+        "channel": {
+          "chi_square": 3.6324016175409097,
+          "p_value": 0.45803390781197906,
+          "dof": 4
+        },
+        "history_segment": {
+          "chi_square": 13.153291572293611,
+          "p_value": 0.3579979967183696,
+          "dof": 12
+        }
+      },
+      "interpretation": "Exploratory pre-treatment balance diagnostics; no p-value is proof of successful randomization or proper exposure logging. No covariate selection/adjustment used to maximize a favorable result."
+    },
+    "primary_metric": "conversion / all randomized assigned customers",
+    "control_comparisons": {
+      "Mens E-Mail": {
+        "conversion": {
+          "treatment_rate": 0.01253109306800582,
+          "control_rate": 0.005726086548390125,
+          "absolute_lift_pp": 0.6805006519615695,
+          "relative_lift": 1.188421876286328,
+          "difference": 0.006805006519615695,
+          "ci95_diff": [
+            0.005014344671481532,
+            0.008640723396917826
+          ],
+          "z_statistic": 7.385114410925771,
+          "raw_p_value": 1.5232235005955427e-13,
+          "confidence_interval_method": "Newcombe-Wilson independent proportions",
+          "p_value_method": "two-sided unpooled counts pooled-null z-test",
+          "holm_adjusted_p_value": 3.0464470011910854e-13,
+          "holm_reject_5pct": true
+        },
+        "conversion_impact_estimate": {
+          "estimated_incremental_conversions_in_assigned_treatment_arm": 144.99427391345162,
+          "unadjusted_ci95_incremental_conversions": [
+            106.84064191525701,
+            184.10789341812813
+          ],
+          "status": "randomized estimate, NOT individually observed incremental conversions"
+        },
+        "visit": {
+          "treatment_rate": 0.18275684047496127,
+          "control_rate": 0.10616727682343002,
+          "absolute_lift_pp": 7.6589563651531245,
+          "relative_lift": 0.721404616781399,
+          "difference": 0.07658956365153125,
+          "ci95_diff": [
+            0.06995330808373154,
+            0.08322674127411137
+          ],
+          "z_statistic": 22.48604082719282,
+          "raw_p_value": 5.685165482802317e-112,
+          "confidence_interval_method": "Newcombe-Wilson independent proportions",
+          "p_value_method": "two-sided unpooled counts pooled-null z-test"
+        },
+        "spend": {
+          "revenue_per_assigned_difference": 0.7698271558945368,
+          "incremental_spend_estimate_for_observed_treatment_arm": 16402.707210644894,
+          "welch_p_value": 1.163814968225482e-07,
+          "bootstrap_ci95_per_assigned_customer": [
+            0.4812576665059236,
+            1.053345044214144
+          ],
+          "bootstrap_iterations": 1500,
+          "bootstrap_seed": 1701,
+          "interpretation": "Difference in observed 2-week spend per randomized customer, not margin/ROI; extrapolated difference is an estimate, not realized incremental ledger receipts"
+        }
+      },
+      "Womens E-Mail": {
+        "conversion": {
+          "treatment_rate": 0.008837144059475383,
+          "control_rate": 0.005726086548390125,
+          "absolute_lift_pp": 0.3111057511085258,
+          "relative_lift": 0.5433130436982172,
+          "difference": 0.003111057511085258,
+          "ci95_diff": [
+            0.001501657131877008,
+            0.004745471313672931
+          ],
+          "z_statistic": 3.77956095835785,
+          "raw_p_value": 0.00015710512910668448,
+          "confidence_interval_method": "Newcombe-Wilson independent proportions",
+          "p_value_method": "two-sided unpooled counts pooled-null z-test",
+          "holm_adjusted_p_value": 0.00015710512910668448,
+          "holm_reject_5pct": true
+        },
+        "conversion_impact_estimate": {
+          "estimated_incremental_conversions_in_assigned_treatment_arm": 66.53618698958041,
+          "unadjusted_ci95_incremental_conversions": [
+            32.11594107945357,
+            101.49139498552297
+          ],
+          "status": "randomized estimate, NOT individually observed incremental conversions"
+        },
+        "visit": {
+          "treatment_rate": 0.151400383410483,
+          "control_rate": 0.10616727682343002,
+          "absolute_lift_pp": 4.523310658705299,
+          "relative_lift": 0.42605507026691014,
+          "difference": 0.045233106587052985,
+          "ci95_diff": [
+            0.03889409535998813,
+            0.051574342962213596
+          ],
+          "z_statistic": 13.949180655258505,
+          "raw_p_value": 3.1824031593349214e-44,
+          "confidence_interval_method": "Newcombe-Wilson independent proportions",
+          "p_value_method": "two-sided unpooled counts pooled-null z-test"
+        },
+        "spend": {
+          "revenue_per_assigned_difference": 0.4244122159365967,
+          "incremental_spend_estimate_for_observed_treatment_arm": 9076.904062235993,
+          "welch_p_value": 0.0011293971023632495,
+          "bootstrap_ci95_per_assigned_customer": [
+            0.17097180117595787,
+            0.6929935596504225
+          ],
+          "bootstrap_iterations": 1500,
+          "bootstrap_seed": 1701,
+          "interpretation": "Difference in observed 2-week spend per randomized customer, not margin/ROI; extrapolated difference is an estimate, not realized incremental ledger receipts"
+        }
+      }
+    },
+    "exploratory_mens_vs_womens": {
+      "conversion": {
+        "treatment_rate": 0.01253109306800582,
+        "control_rate": 0.008837144059475383,
+        "absolute_lift_pp": 0.3693949008530437,
+        "relative_lift": 0.4180025790764046,
+        "difference": 0.003693949008530437,
+        "ci95_diff": [
+          0.0017462848141901722,
+          0.005662614423391559
+        ],
+        "z_statistic": 3.7125842027552878,
+        "raw_p_value": 0.0002051537746568838,
+        "confidence_interval_method": "Newcombe-Wilson independent proportions",
+        "p_value_method": "two-sided unpooled counts pooled-null z-test"
+      }
+    },
+    "notes": [
+      "Primary confirmatory family consists of two conversion-vs-control contrasts, Holm-corrected at 5%.",
+      "Mens-vs-Womens comparison, website visit and monetary outcomes are secondary/exploratory; unadjusted p-values are not confirmatory.",
+      "Spend is zero-heavy/skewed: bootstrapped confidence intervals are sensitivity context, not a guarantee of normality.",
+      "Randomization supports intent-to-treat effect of assignment only, not who actually opened or read an email.",
+      "No cost/margin/deliverability measures supplied; ROI, profit and actual send/open impact unavailable."
+    ]
+  },
+  "segments": [
+    {
+      "dimension": "zip_code",
+      "value": "Rural",
+      "assigned": 3243,
+      "conversions": 44,
+      "visits": 736,
+      "spend_total": 4937.91,
+      "conversion_rate": 0.013567684242984891,
+      "visit_rate": 0.22695035460992907,
+      "spend_per_assigned": 1.5226364477335799,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "zip_code",
+      "value": "Suburban",
+      "assigned": 9501,
+      "conversions": 118,
+      "visits": 1647,
+      "spend_total": 13997.73,
+      "conversion_rate": 0.012419745289969477,
+      "visit_rate": 0.1733501736659299,
+      "spend_per_assigned": 1.4732901799810545,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "zip_code",
+      "value": "Urban",
+      "assigned": 8563,
+      "conversions": 105,
+      "visits": 1511,
+      "spend_total": 11376.05,
+      "conversion_rate": 0.012262057690061895,
+      "visit_rate": 0.17645684923508118,
+      "spend_per_assigned": 1.328512203666939,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "zip_code",
+      "value": "Rural",
+      "assigned": 3139,
+      "conversions": 26,
+      "visits": 482,
+      "spend_total": 2408.04,
+      "conversion_rate": 0.00828289264096846,
+      "visit_rate": 0.15355208665179992,
+      "spend_per_assigned": 0.7671360305829882,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "zip_code",
+      "value": "Suburban",
+      "assigned": 9625,
+      "conversions": 48,
+      "visits": 953,
+      "spend_total": 6443.38,
+      "conversion_rate": 0.004987012987012987,
+      "visit_rate": 0.09901298701298701,
+      "spend_per_assigned": 0.6694420779220779,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "zip_code",
+      "value": "Urban",
+      "assigned": 8542,
+      "conversions": 48,
+      "visits": 827,
+      "spend_total": 5056.91,
+      "conversion_rate": 0.005619292905642706,
+      "visit_rate": 0.0968157340201358,
+      "spend_per_assigned": 0.5920053851557012,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "zip_code",
+      "value": "Rural",
+      "assigned": 3181,
+      "conversions": 37,
+      "visits": 581,
+      "spend_total": 4077.97,
+      "conversion_rate": 0.011631562401760453,
+      "visit_rate": 0.182646966362779,
+      "spend_per_assigned": 1.2819773656082991,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "zip_code",
+      "value": "Suburban",
+      "assigned": 9650,
+      "conversions": 73,
+      "visits": 1427,
+      "spend_total": 8169.82,
+      "conversion_rate": 0.0075647668393782385,
+      "visit_rate": 0.14787564766839378,
+      "spend_per_assigned": 0.8466134715025907,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "zip_code",
+      "value": "Urban",
+      "assigned": 8556,
+      "conversions": 79,
+      "visits": 1230,
+      "spend_total": 10790.32,
+      "conversion_rate": 0.009233286582515194,
+      "visit_rate": 0.14375876577840113,
+      "spend_per_assigned": 1.2611407199625992,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "channel",
+      "value": "Multichannel",
+      "assigned": 2577,
+      "conversions": 44,
+      "visits": 545,
+      "spend_total": 4702.69,
+      "conversion_rate": 0.017074117190531625,
+      "visit_rate": 0.21148622429181219,
+      "spend_per_assigned": 1.824870003880481,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "channel",
+      "value": "Phone",
+      "assigned": 9240,
+      "conversions": 100,
+      "visits": 1504,
+      "spend_total": 11166.789999999999,
+      "conversion_rate": 0.010822510822510822,
+      "visit_rate": 0.16277056277056276,
+      "spend_per_assigned": 1.2085270562770563,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "channel",
+      "value": "Web",
+      "assigned": 9490,
+      "conversions": 123,
+      "visits": 1845,
+      "spend_total": 14442.21,
+      "conversion_rate": 0.012961011591148578,
+      "visit_rate": 0.19441517386722867,
+      "spend_per_assigned": 1.5218345626975762,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "channel",
+      "value": "Multichannel",
+      "assigned": 2606,
+      "conversions": 18,
+      "visits": 335,
+      "spend_total": 1604.6200000000001,
+      "conversion_rate": 0.006907137375287797,
+      "visit_rate": 0.12854950115118957,
+      "spend_per_assigned": 0.6157405986185726,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "channel",
+      "value": "Phone",
+      "assigned": 9327,
+      "conversions": 50,
+      "visits": 813,
+      "spend_total": 6010.81,
+      "conversion_rate": 0.005360780529645117,
+      "visit_rate": 0.0871662914120296,
+      "spend_per_assigned": 0.6444526643079233,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "channel",
+      "value": "Web",
+      "assigned": 9373,
+      "conversions": 54,
+      "visits": 1114,
+      "spend_total": 6292.9,
+      "conversion_rate": 0.005761229062199936,
+      "visit_rate": 0.11885202176464313,
+      "spend_per_assigned": 0.6713858956577403,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "channel",
+      "value": "Multichannel",
+      "assigned": 2579,
+      "conversions": 36,
+      "visits": 453,
+      "spend_total": 4573.28,
+      "conversion_rate": 0.013958898797983715,
+      "visit_rate": 0.17564947654129506,
+      "spend_per_assigned": 1.7732764637456377,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "channel",
+      "value": "Phone",
+      "assigned": 9454,
+      "conversions": 67,
+      "visits": 1246,
+      "spend_total": 8290.460000000001,
+      "conversion_rate": 0.00708694732388407,
+      "visit_rate": 0.13179606515760525,
+      "spend_per_assigned": 0.8769261688174319,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "channel",
+      "value": "Web",
+      "assigned": 9354,
+      "conversions": 86,
+      "visits": 1539,
+      "spend_total": 10174.37,
+      "conversion_rate": 0.009193927731451786,
+      "visit_rate": 0.16452854393842206,
+      "spend_per_assigned": 1.0877025871285013,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "newbie",
+      "value": "0",
+      "assigned": 10621,
+      "conversions": 148,
+      "visits": 2247,
+      "spend_total": 16072.94,
+      "conversion_rate": 0.013934657753507202,
+      "visit_rate": 0.21156199981169382,
+      "spend_per_assigned": 1.5133170134638922,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "newbie",
+      "value": "1",
+      "assigned": 10686,
+      "conversions": 119,
+      "visits": 1647,
+      "spend_total": 14238.75,
+      "conversion_rate": 0.011136065880591428,
+      "visit_rate": 0.1541268950028074,
+      "spend_per_assigned": 1.3324677147669848,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "newbie",
+      "value": "0",
+      "assigned": 10611,
+      "conversions": 82,
+      "visits": 1419,
+      "spend_total": 9925.0,
+      "conversion_rate": 0.007727829610781264,
+      "visit_rate": 0.13372914899632457,
+      "spend_per_assigned": 0.9353501083780982,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "newbie",
+      "value": "1",
+      "assigned": 10695,
+      "conversions": 40,
+      "visits": 843,
+      "spend_total": 3983.33,
+      "conversion_rate": 0.0037400654511453952,
+      "visit_rate": 0.0788218793828892,
+      "spend_per_assigned": 0.37244787283777464,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "newbie",
+      "value": "0",
+      "assigned": 10624,
+      "conversions": 92,
+      "visits": 1847,
+      "spend_total": 11147.84,
+      "conversion_rate": 0.008659638554216868,
+      "visit_rate": 0.17385165662650603,
+      "spend_per_assigned": 1.0493072289156626,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "newbie",
+      "value": "1",
+      "assigned": 10763,
+      "conversions": 97,
+      "visits": 1391,
+      "spend_total": 11890.27,
+      "conversion_rate": 0.009012357149493635,
+      "visit_rate": 0.1292390597417077,
+      "spend_per_assigned": 1.1047356684939145,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "mens",
+      "value": "0",
+      "assigned": 9568,
+      "conversions": 104,
+      "visits": 1592,
+      "spend_total": 10585.03,
+      "conversion_rate": 0.010869565217391304,
+      "visit_rate": 0.16638795986622074,
+      "spend_per_assigned": 1.106294941471572,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "mens",
+      "value": "1",
+      "assigned": 11739,
+      "conversions": 163,
+      "visits": 2302,
+      "spend_total": 19726.66,
+      "conversion_rate": 0.013885339466734816,
+      "visit_rate": 0.1960984751682426,
+      "spend_per_assigned": 1.6804378567169265,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "mens",
+      "value": "0",
+      "assigned": 9519,
+      "conversions": 49,
+      "visits": 912,
+      "spend_total": 4669.68,
+      "conversion_rate": 0.005147599537766572,
+      "visit_rate": 0.09580838323353294,
+      "spend_per_assigned": 0.4905641348881185,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "mens",
+      "value": "1",
+      "assigned": 11787,
+      "conversions": 73,
+      "visits": 1350,
+      "spend_total": 9238.65,
+      "conversion_rate": 0.006193263765165012,
+      "visit_rate": 0.11453296004072283,
+      "spend_per_assigned": 0.7837999490964622,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "mens",
+      "value": "0",
+      "assigned": 9647,
+      "conversions": 99,
+      "visits": 1638,
+      "spend_total": 10825.98,
+      "conversion_rate": 0.010262257696693273,
+      "visit_rate": 0.1697937182543796,
+      "spend_per_assigned": 1.122212086659065,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "mens",
+      "value": "1",
+      "assigned": 11740,
+      "conversions": 90,
+      "visits": 1600,
+      "spend_total": 12212.13,
+      "conversion_rate": 0.007666098807495741,
+      "visit_rate": 0.1362862010221465,
+      "spend_per_assigned": 1.040215502555366,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "womens",
+      "value": "0",
+      "assigned": 9558,
+      "conversions": 110,
+      "visits": 1615,
+      "spend_total": 13172.47,
+      "conversion_rate": 0.011508683825068006,
+      "visit_rate": 0.16896840343168026,
+      "spend_per_assigned": 1.3781617493199414,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "womens",
+      "value": "1",
+      "assigned": 11749,
+      "conversions": 157,
+      "visits": 2279,
+      "spend_total": 17139.22,
+      "conversion_rate": 0.013362839390586433,
+      "visit_rate": 0.19397395523023236,
+      "spend_per_assigned": 1.4587811728657758,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "womens",
+      "value": "0",
+      "assigned": 9638,
+      "conversions": 53,
+      "visits": 962,
+      "spend_total": 6702.5199999999995,
+      "conversion_rate": 0.005499066196306288,
+      "visit_rate": 0.09981323926125753,
+      "spend_per_assigned": 0.6954264370201286,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "womens",
+      "value": "1",
+      "assigned": 11668,
+      "conversions": 69,
+      "visits": 1300,
+      "spend_total": 7205.81,
+      "conversion_rate": 0.005913609873157353,
+      "visit_rate": 0.11141583818992115,
+      "spend_per_assigned": 0.6175702776825506,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "womens",
+      "value": "0",
+      "assigned": 9622,
+      "conversions": 59,
+      "visits": 1067,
+      "spend_total": 9369.72,
+      "conversion_rate": 0.006131781334441904,
+      "visit_rate": 0.11089170650592392,
+      "spend_per_assigned": 0.9737809187279152,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "womens",
+      "value": "1",
+      "assigned": 11765,
+      "conversions": 130,
+      "visits": 2171,
+      "spend_total": 13668.39,
+      "conversion_rate": 0.011049723756906077,
+      "visit_rate": 0.18453038674033148,
+      "spend_per_assigned": 1.161784105397365,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "1) $0 - $100",
+      "assigned": 7724,
+      "conversions": 71,
+      "visits": 1185,
+      "spend_total": 8150.18,
+      "conversion_rate": 0.009192128430864838,
+      "visit_rate": 0.1534179181771103,
+      "spend_per_assigned": 1.0551760745727603,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "2) $100 - $200",
+      "assigned": 4691,
+      "conversions": 42,
+      "visits": 751,
+      "spend_total": 5287.43,
+      "conversion_rate": 0.008953314858239182,
+      "visit_rate": 0.16009379663184822,
+      "spend_per_assigned": 1.127143466211895,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "3) $200 - $350",
+      "assigned": 4090,
+      "conversions": 63,
+      "visits": 862,
+      "spend_total": 6010.1,
+      "conversion_rate": 0.015403422982885086,
+      "visit_rate": 0.21075794621026894,
+      "spend_per_assigned": 1.4694621026894867,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "4) $350 - $500",
+      "assigned": 2097,
+      "conversions": 42,
+      "visits": 502,
+      "spend_total": 5408.599999999999,
+      "conversion_rate": 0.020028612303290415,
+      "visit_rate": 0.23938960419647115,
+      "spend_per_assigned": 2.579208392942298,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "5) $500 - $750",
+      "assigned": 1597,
+      "conversions": 22,
+      "visits": 333,
+      "spend_total": 2622.06,
+      "conversion_rate": 0.013775829680651221,
+      "visit_rate": 0.20851596743894804,
+      "spend_per_assigned": 1.6418659987476518,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "6) $750 - $1,000",
+      "assigned": 644,
+      "conversions": 16,
+      "visits": 139,
+      "spend_total": 1213.09,
+      "conversion_rate": 0.024844720496894408,
+      "visit_rate": 0.21583850931677018,
+      "spend_per_assigned": 1.8836801242236023,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "7) $1,000 +",
+      "assigned": 464,
+      "conversions": 11,
+      "visits": 122,
+      "spend_total": 1620.23,
+      "conversion_rate": 0.023706896551724137,
+      "visit_rate": 0.2629310344827586,
+      "spend_per_assigned": 3.491875,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "1) $0 - $100",
+      "assigned": 7612,
+      "conversions": 32,
+      "visits": 646,
+      "spend_total": 3934.59,
+      "conversion_rate": 0.004203888596952181,
+      "visit_rate": 0.08486600105097215,
+      "spend_per_assigned": 0.516893063583815,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "2) $100 - $200",
+      "assigned": 4836,
+      "conversions": 20,
+      "visits": 440,
+      "spend_total": 2045.12,
+      "conversion_rate": 0.0041356492969396195,
+      "visit_rate": 0.09098428453267163,
+      "spend_per_assigned": 0.4228949545078577,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "3) $200 - $350",
+      "assigned": 4044,
+      "conversions": 28,
+      "visits": 511,
+      "spend_total": 3772.57,
+      "conversion_rate": 0.006923837784371909,
+      "visit_rate": 0.12636003956478734,
+      "spend_per_assigned": 0.9328808110781405,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "4) $350 - $500",
+      "assigned": 2124,
+      "conversions": 24,
+      "visits": 319,
+      "spend_total": 2145.81,
+      "conversion_rate": 0.011299435028248588,
+      "visit_rate": 0.1501883239171375,
+      "spend_per_assigned": 1.0102683615819208,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "5) $500 - $750",
+      "assigned": 1652,
+      "conversions": 9,
+      "visits": 181,
+      "spend_total": 890.19,
+      "conversion_rate": 0.005447941888619854,
+      "visit_rate": 0.10956416464891042,
+      "spend_per_assigned": 0.5388559322033899,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "6) $750 - $1,000",
+      "assigned": 622,
+      "conversions": 3,
+      "visits": 96,
+      "spend_total": 217.41,
+      "conversion_rate": 0.00482315112540193,
+      "visit_rate": 0.15434083601286175,
+      "spend_per_assigned": 0.3495337620578778,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "7) $1,000 +",
+      "assigned": 416,
+      "conversions": 6,
+      "visits": 69,
+      "spend_total": 902.64,
+      "conversion_rate": 0.014423076923076924,
+      "visit_rate": 0.1658653846153846,
+      "spend_per_assigned": 2.169807692307692,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "1) $0 - $100",
+      "assigned": 7634,
+      "conversions": 61,
+      "visits": 1005,
+      "spend_total": 8723.47,
+      "conversion_rate": 0.007990568509300498,
+      "visit_rate": 0.13164789101388524,
+      "spend_per_assigned": 1.1427128635053707,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "2) $100 - $200",
+      "assigned": 4727,
+      "conversions": 37,
+      "visits": 631,
+      "spend_total": 4165.85,
+      "conversion_rate": 0.007827374656230167,
+      "visit_rate": 0.13348847048868204,
+      "spend_per_assigned": 0.8812883435582823,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "3) $200 - $350",
+      "assigned": 4155,
+      "conversions": 26,
+      "visits": 675,
+      "spend_total": 2533.4700000000003,
+      "conversion_rate": 0.006257521058965102,
+      "visit_rate": 0.1624548736462094,
+      "spend_per_assigned": 0.6097400722021661,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "4) $350 - $500",
+      "assigned": 2188,
+      "conversions": 20,
+      "visits": 417,
+      "spend_total": 1989.72,
+      "conversion_rate": 0.009140767824497258,
+      "visit_rate": 0.1905850091407678,
+      "spend_per_assigned": 0.9093784277879342,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "5) $500 - $750",
+      "assigned": 1662,
+      "conversions": 26,
+      "visits": 292,
+      "spend_total": 3032.33,
+      "conversion_rate": 0.015643802647412757,
+      "visit_rate": 0.17569193742478942,
+      "spend_per_assigned": 1.8245066185318892,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "6) $750 - $1,000",
+      "assigned": 593,
+      "conversions": 8,
+      "visits": 124,
+      "spend_total": 591.6899999999999,
+      "conversion_rate": 0.013490725126475547,
+      "visit_rate": 0.209106239460371,
+      "spend_per_assigned": 0.9977908937605395,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "history_segment",
+      "value": "7) $1,000 +",
+      "assigned": 428,
+      "conversions": 11,
+      "visits": 94,
+      "spend_total": 2001.58,
+      "conversion_rate": 0.02570093457943925,
+      "visit_rate": 0.21962616822429906,
+      "spend_per_assigned": 4.676588785046729,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "1",
+      "assigned": 2963,
+      "conversions": 54,
+      "visits": 691,
+      "spend_total": 5546.81,
+      "conversion_rate": 0.01822477219034762,
+      "visit_rate": 0.233209584880189,
+      "spend_per_assigned": 1.8720249746878166,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "2",
+      "assigned": 2543,
+      "conversions": 37,
+      "visits": 563,
+      "spend_total": 4840.69,
+      "conversion_rate": 0.014549744396382226,
+      "visit_rate": 0.22139205662603226,
+      "spend_per_assigned": 1.9035351946519856,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "3",
+      "assigned": 1963,
+      "conversions": 31,
+      "visits": 410,
+      "spend_total": 4484.39,
+      "conversion_rate": 0.015792154865002548,
+      "visit_rate": 0.2088639836984208,
+      "spend_per_assigned": 2.284457463066735,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "4",
+      "assigned": 1685,
+      "conversions": 24,
+      "visits": 328,
+      "spend_total": 1592.3799999999999,
+      "conversion_rate": 0.014243323442136498,
+      "visit_rate": 0.1946587537091988,
+      "spend_per_assigned": 0.9450326409495549,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "5",
+      "assigned": 1468,
+      "conversions": 11,
+      "visits": 247,
+      "spend_total": 1496.24,
+      "conversion_rate": 0.007493188010899182,
+      "visit_rate": 0.16825613079019072,
+      "spend_per_assigned": 1.0192370572207083,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "6",
+      "assigned": 1520,
+      "conversions": 14,
+      "visits": 272,
+      "spend_total": 1619.78,
+      "conversion_rate": 0.009210526315789473,
+      "visit_rate": 0.17894736842105263,
+      "spend_per_assigned": 1.0656447368421051,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "7",
+      "assigned": 1311,
+      "conversions": 16,
+      "visits": 206,
+      "spend_total": 2228.56,
+      "conversion_rate": 0.012204424103737605,
+      "visit_rate": 0.15713196033562166,
+      "spend_per_assigned": 1.6998932112890923,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "8",
+      "assigned": 1173,
+      "conversions": 10,
+      "visits": 181,
+      "spend_total": 783.79,
+      "conversion_rate": 0.008525149190110827,
+      "visit_rate": 0.15430520034100598,
+      "spend_per_assigned": 0.6681926683716964,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "9",
+      "assigned": 2204,
+      "conversions": 27,
+      "visits": 327,
+      "spend_total": 2524.29,
+      "conversion_rate": 0.012250453720508167,
+      "visit_rate": 0.1483666061705989,
+      "spend_per_assigned": 1.1453221415607986,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "10",
+      "assigned": 2538,
+      "conversions": 27,
+      "visits": 377,
+      "spend_total": 3498.25,
+      "conversion_rate": 0.010638297872340425,
+      "visit_rate": 0.14854215918045705,
+      "spend_per_assigned": 1.3783490937746257,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "11",
+      "assigned": 1164,
+      "conversions": 6,
+      "visits": 168,
+      "spend_total": 403.28,
+      "conversion_rate": 0.005154639175257732,
+      "visit_rate": 0.14432989690721648,
+      "spend_per_assigned": 0.3464604810996563,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "12",
+      "assigned": 775,
+      "conversions": 10,
+      "visits": 124,
+      "spend_total": 1293.23,
+      "conversion_rate": 0.012903225806451613,
+      "visit_rate": 0.16,
+      "spend_per_assigned": 1.668683870967742,
+      "segment": "Mens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "1",
+      "assigned": 2971,
+      "conversions": 27,
+      "visits": 441,
+      "spend_total": 2511.0,
+      "conversion_rate": 0.009087849209020532,
+      "visit_rate": 0.14843487041400202,
+      "spend_per_assigned": 0.8451699764389095,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "2",
+      "assigned": 2531,
+      "conversions": 20,
+      "visits": 340,
+      "spend_total": 2787.55,
+      "conversion_rate": 0.007902015013828527,
+      "visit_rate": 0.13433425523508494,
+      "spend_per_assigned": 1.1013630975898856,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "3",
+      "assigned": 1936,
+      "conversions": 20,
+      "visits": 244,
+      "spend_total": 1719.58,
+      "conversion_rate": 0.010330578512396695,
+      "visit_rate": 0.12603305785123967,
+      "spend_per_assigned": 0.8882128099173553,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "4",
+      "assigned": 1721,
+      "conversions": 9,
+      "visits": 192,
+      "spend_total": 741.84,
+      "conversion_rate": 0.005229517722254503,
+      "visit_rate": 0.1115630447414294,
+      "spend_per_assigned": 0.4310517141196979,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "5",
+      "assigned": 1517,
+      "conversions": 7,
+      "visits": 167,
+      "spend_total": 581.74,
+      "conversion_rate": 0.004614370468029005,
+      "visit_rate": 0.11008569545154911,
+      "spend_per_assigned": 0.38348055372445616,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "6",
+      "assigned": 1528,
+      "conversions": 10,
+      "visits": 145,
+      "spend_total": 1150.87,
+      "conversion_rate": 0.006544502617801047,
+      "visit_rate": 0.09489528795811518,
+      "spend_per_assigned": 0.753187172774869,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "7",
+      "assigned": 1409,
+      "conversions": 4,
+      "visits": 141,
+      "spend_total": 538.7,
+      "conversion_rate": 0.0028388928317956,
+      "visit_rate": 0.10007097232079488,
+      "spend_per_assigned": 0.3823278921220724,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "8",
+      "assigned": 1164,
+      "conversions": 7,
+      "visits": 105,
+      "spend_total": 1511.57,
+      "conversion_rate": 0.006013745704467354,
+      "visit_rate": 0.09020618556701031,
+      "spend_per_assigned": 1.2985996563573883,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "9",
+      "assigned": 2126,
+      "conversions": 5,
+      "visits": 139,
+      "spend_total": 656.06,
+      "conversion_rate": 0.0023518344308560675,
+      "visit_rate": 0.06538099717779869,
+      "spend_per_assigned": 0.3085888993414863,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "10",
+      "assigned": 2484,
+      "conversions": 5,
+      "visits": 190,
+      "spend_total": 937.16,
+      "conversion_rate": 0.002012882447665056,
+      "visit_rate": 0.07648953301127215,
+      "spend_per_assigned": 0.37727858293075683,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "11",
+      "assigned": 1152,
+      "conversions": 4,
+      "visits": 102,
+      "spend_total": 345.1,
+      "conversion_rate": 0.003472222222222222,
+      "visit_rate": 0.08854166666666667,
+      "spend_per_assigned": 0.29956597222222225,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "12",
+      "assigned": 767,
+      "conversions": 4,
+      "visits": 56,
+      "spend_total": 427.16,
+      "conversion_rate": 0.005215123859191656,
+      "visit_rate": 0.07301173402868318,
+      "spend_per_assigned": 0.556923076923077,
+      "segment": "No E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "1",
+      "assigned": 3018,
+      "conversions": 43,
+      "visits": 596,
+      "spend_total": 5015.41,
+      "conversion_rate": 0.014247846255798542,
+      "visit_rate": 0.19748177601060304,
+      "spend_per_assigned": 1.661832339297548,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "2",
+      "assigned": 2463,
+      "conversions": 28,
+      "visits": 437,
+      "spend_total": 3187.27,
+      "conversion_rate": 0.011368250101502234,
+      "visit_rate": 0.17742590336987413,
+      "spend_per_assigned": 1.2940600893219651,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "3",
+      "assigned": 2005,
+      "conversions": 17,
+      "visits": 328,
+      "spend_total": 1545.22,
+      "conversion_rate": 0.008478802992518703,
+      "visit_rate": 0.16359102244389026,
+      "spend_per_assigned": 0.7706832917705736,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "4",
+      "assigned": 1671,
+      "conversions": 14,
+      "visits": 236,
+      "spend_total": 3050.23,
+      "conversion_rate": 0.008378216636744464,
+      "visit_rate": 0.1412327947336924,
+      "spend_per_assigned": 1.8253919808497905,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "5",
+      "assigned": 1525,
+      "conversions": 13,
+      "visits": 228,
+      "spend_total": 1206.2,
+      "conversion_rate": 0.008524590163934427,
+      "visit_rate": 0.14950819672131146,
+      "spend_per_assigned": 0.7909508196721312,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "6",
+      "assigned": 1557,
+      "conversions": 11,
+      "visits": 231,
+      "spend_total": 1374.31,
+      "conversion_rate": 0.007064868336544637,
+      "visit_rate": 0.14836223506743737,
+      "spend_per_assigned": 0.8826653821451509,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "7",
+      "assigned": 1358,
+      "conversions": 6,
+      "visits": 199,
+      "spend_total": 446.23999999999995,
+      "conversion_rate": 0.004418262150220913,
+      "visit_rate": 0.14653902798232696,
+      "spend_per_assigned": 0.32860088365243,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "8",
+      "assigned": 1158,
+      "conversions": 8,
+      "visits": 161,
+      "spend_total": 1807.33,
+      "conversion_rate": 0.0069084628670120895,
+      "visit_rate": 0.13903281519861832,
+      "spend_per_assigned": 1.56073402417962,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "9",
+      "assigned": 2111,
+      "conversions": 17,
+      "visits": 268,
+      "spend_total": 1797.03,
+      "conversion_rate": 0.008053055423969682,
+      "visit_rate": 0.1269540502131691,
+      "spend_per_assigned": 0.8512695405021317,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "10",
+      "assigned": 2543,
+      "conversions": 18,
+      "visits": 285,
+      "spend_total": 2092.1400000000003,
+      "conversion_rate": 0.007078254030672434,
+      "visit_rate": 0.11207235548564687,
+      "spend_per_assigned": 0.8227054659850571,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "11",
+      "assigned": 1188,
+      "conversions": 7,
+      "visits": 153,
+      "spend_total": 769.9399999999999,
+      "conversion_rate": 0.005892255892255892,
+      "visit_rate": 0.12878787878787878,
+      "spend_per_assigned": 0.6480976430976431,
+      "segment": "Womens E-Mail"
+    },
+    {
+      "dimension": "recency",
+      "value": "12",
+      "assigned": 790,
+      "conversions": 7,
+      "visits": 116,
+      "spend_total": 746.79,
+      "conversion_rate": 0.008860759493670886,
+      "visit_rate": 0.1468354430379747,
+      "spend_per_assigned": 0.9453037974683544,
+      "segment": "Womens E-Mail"
+    }
+  ],
+  "recommendation": "Mens E-Mail shows evidence of improved assignment-level conversion over control under the pre-specified Holm-adjusted comparison. Recommend a gated follow-up rollout/test, not an unconditional profit claim: confirm sending cost, contribution margin, deliverability and long-run effects first."
+}

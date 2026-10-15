@@ -1,0 +1,223 @@
+{
+  "n": 64000,
+  "groups": {
+    "No E-Mail": {
+      "assigned": 21306,
+      "conversions": 122,
+      "visits": 2262,
+      "spend_total": 13908.33,
+      "conversion_rate": 0.005726086548390125,
+      "visit_rate": 0.10616727682343002,
+      "spend_per_assigned": 0.6527893551112361,
+      "conversion_ci95_wilson": [
+        0.00479820584596141,
+        0.006832169692008918
+      ]
+    },
+    "Mens E-Mail": {
+      "assigned": 21307,
+      "conversions": 267,
+      "visits": 3894,
+      "spend_total": 30311.69,
+      "conversion_rate": 0.01253109306800582,
+      "visit_rate": 0.18275684047496127,
+      "spend_per_assigned": 1.422616511005773,
+      "conversion_ci95_wilson": [
+        0.011122885010307802,
+        0.014115041885257276
+      ]
+    },
+    "Womens E-Mail": {
+      "assigned": 21387,
+      "conversions": 189,
+      "visits": 3238,
+      "spend_total": 23038.11,
+      "conversion_rate": 0.008837144059475383,
+      "visit_rate": 0.151400383410483,
+      "spend_per_assigned": 1.0772015710478329,
+      "conversion_ci95_wilson": [
+        0.007668063369361126,
+        0.010182635003387489
+      ]
+    }
+  },
+  "srm": {
+    "chi_square": 0.20253125000000002,
+    "p_value": 0.9036929575604196,
+    "threshold": 0.001,
+    "flag": false,
+    "expected_per_arm": 21333.333333333332,
+    "assumption": "Equal 1:1:1 intended random allocation, not guaranteed exact counts"
+  },
+  "baseline_balance": {
+    "standardized_mean_differences_vs_control": {
+      "Mens E-Mail": {
+        "recency": 0.006831532454259954,
+        "history": 0.00761286832154239,
+        "mens": -0.0045823256374879625,
+        "womens": 0.007588929691887142,
+        "newbie": -0.0008918953696535328
+      },
+      "Womens E-Mail": {
+        "recency": 0.005180013205688683,
+        "history": 0.006510722458553667,
+        "mens": -0.008630731202832915,
+        "womens": 0.004946313992582152,
+        "newbie": 0.0025567009140795606
+      }
+    },
+    "categorical_independence_tests": {
+      "zip_code": {
+        "chi_square": 2.8719422089251405,
+        "p_value": 0.5794791381657298,
+        "dof": 4
+      },
+      "channel": {
+        "chi_square": 3.6324016175409097,
+        "p_value": 0.45803390781197906,
+        "dof": 4
+      },
+      "history_segment": {
+        "chi_square": 13.153291572293611,
+        "p_value": 0.3579979967183696,
+        "dof": 12
+      }
+    },
+    "interpretation": "Exploratory pre-treatment balance diagnostics; no p-value is proof of successful randomization or proper exposure logging. No covariate selection/adjustment used to maximize a favorable result."
+  },
+  "primary_metric": "conversion / all randomized assigned customers",
+  "control_comparisons": {
+    "Mens E-Mail": {
+      "conversion": {
+        "treatment_rate": 0.01253109306800582,
+        "control_rate": 0.005726086548390125,
+        "absolute_lift_pp": 0.6805006519615695,
+        "relative_lift": 1.188421876286328,
+        "difference": 0.006805006519615695,
+        "ci95_diff": [
+          0.005014344671481532,
+          0.008640723396917826
+        ],
+        "z_statistic": 7.385114410925771,
+        "raw_p_value": 1.5232235005955427e-13,
+        "confidence_interval_method": "Newcombe-Wilson independent proportions",
+        "p_value_method": "two-sided unpooled counts pooled-null z-test",
+        "holm_adjusted_p_value": 3.0464470011910854e-13,
+        "holm_reject_5pct": true
+      },
+      "conversion_impact_estimate": {
+        "estimated_incremental_conversions_in_assigned_treatment_arm": 144.99427391345162,
+        "unadjusted_ci95_incremental_conversions": [
+          106.84064191525701,
+          184.10789341812813
+        ],
+        "status": "randomized estimate, NOT individually observed incremental conversions"
+      },
+      "visit": {
+        "treatment_rate": 0.18275684047496127,
+        "control_rate": 0.10616727682343002,
+        "absolute_lift_pp": 7.6589563651531245,
+        "relative_lift": 0.721404616781399,
+        "difference": 0.07658956365153125,
+        "ci95_diff": [
+          0.06995330808373154,
+          0.08322674127411137
+        ],
+        "z_statistic": 22.48604082719282,
+        "raw_p_value": 5.685165482802317e-112,
+        "confidence_interval_method": "Newcombe-Wilson independent proportions",
+        "p_value_method": "two-sided unpooled counts pooled-null z-test"
+      },
+      "spend": {
+        "revenue_per_assigned_difference": 0.7698271558945368,
+        "incremental_spend_estimate_for_observed_treatment_arm": 16402.707210644894,
+        "welch_p_value": 1.163814968225482e-07,
+        "bootstrap_ci95_per_assigned_customer": [
+          0.4812576665059236,
+          1.053345044214144
+        ],
+        "bootstrap_iterations": 1500,
+        "bootstrap_seed": 1701,
+        "interpretation": "Difference in observed 2-week spend per randomized customer, not margin/ROI; extrapolated difference is an estimate, not realized incremental ledger receipts"
+      }
+    },
+    "Womens E-Mail": {
+      "conversion": {
+        "treatment_rate": 0.008837144059475383,
+        "control_rate": 0.005726086548390125,
+        "absolute_lift_pp": 0.3111057511085258,
+        "relative_lift": 0.5433130436982172,
+        "difference": 0.003111057511085258,
+        "ci95_diff": [
+          0.001501657131877008,
+          0.004745471313672931
+        ],
+        "z_statistic": 3.77956095835785,
+        "raw_p_value": 0.00015710512910668448,
+        "confidence_interval_method": "Newcombe-Wilson independent proportions",
+        "p_value_method": "two-sided unpooled counts pooled-null z-test",
+        "holm_adjusted_p_value": 0.00015710512910668448,
+        "holm_reject_5pct": true
+      },
+      "conversion_impact_estimate": {
+        "estimated_incremental_conversions_in_assigned_treatment_arm": 66.53618698958041,
+        "unadjusted_ci95_incremental_conversions": [
+          32.11594107945357,
+          101.49139498552297
+        ],
+        "status": "randomized estimate, NOT individually observed incremental conversions"
+      },
+      "visit": {
+        "treatment_rate": 0.151400383410483,
+        "control_rate": 0.10616727682343002,
+        "absolute_lift_pp": 4.523310658705299,
+        "relative_lift": 0.42605507026691014,
+        "difference": 0.045233106587052985,
+        "ci95_diff": [
+          0.03889409535998813,
+          0.051574342962213596
+        ],
+        "z_statistic": 13.949180655258505,
+        "raw_p_value": 3.1824031593349214e-44,
+        "confidence_interval_method": "Newcombe-Wilson independent proportions",
+        "p_value_method": "two-sided unpooled counts pooled-null z-test"
+      },
+      "spend": {
+        "revenue_per_assigned_difference": 0.4244122159365967,
+        "incremental_spend_estimate_for_observed_treatment_arm": 9076.904062235993,
+        "welch_p_value": 0.0011293971023632495,
+        "bootstrap_ci95_per_assigned_customer": [
+          0.17097180117595787,
+          0.6929935596504225
+        ],
+        "bootstrap_iterations": 1500,
+        "bootstrap_seed": 1701,
+        "interpretation": "Difference in observed 2-week spend per randomized customer, not margin/ROI; extrapolated difference is an estimate, not realized incremental ledger receipts"
+      }
+    }
+  },
+  "exploratory_mens_vs_womens": {
+    "conversion": {
+      "treatment_rate": 0.01253109306800582,
+      "control_rate": 0.008837144059475383,
+      "absolute_lift_pp": 0.3693949008530437,
+      "relative_lift": 0.4180025790764046,
+      "difference": 0.003693949008530437,
+      "ci95_diff": [
+        0.0017462848141901722,
+        0.005662614423391559
+      ],
+      "z_statistic": 3.7125842027552878,
+      "raw_p_value": 0.0002051537746568838,
+      "confidence_interval_method": "Newcombe-Wilson independent proportions",
+      "p_value_method": "two-sided unpooled counts pooled-null z-test"
+    }
+  },
+  "notes": [
+    "Primary confirmatory family consists of two conversion-vs-control contrasts, Holm-corrected at 5%.",
+    "Mens-vs-Womens comparison, website visit and monetary outcomes are secondary/exploratory; unadjusted p-values are not confirmatory.",
+    "Spend is zero-heavy/skewed: bootstrapped confidence intervals are sensitivity context, not a guarantee of normality.",
+    "Randomization supports intent-to-treat effect of assignment only, not who actually opened or read an email.",
+    "No cost/margin/deliverability measures supplied; ROI, profit and actual send/open impact unavailable."
+  ]
+}

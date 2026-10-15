@@ -1,0 +1,44 @@
+{
+  "raw_sha256": "27bab8c5d3669f26ec08ebb50a0a78317542f29501156f2e2af6781fab4cd7e2",
+  "processed_sha256": "fe23236e6805dffb9d97bdac1730dd43a4cfba4dc8e2281d016432bfebcda15a",
+  "profile": {
+    "rows": 64000,
+    "columns": 12,
+    "missing_per_column": {
+      "recency": 0,
+      "history_segment": 0,
+      "history": 0,
+      "mens": 0,
+      "womens": 0,
+      "zip_code": 0,
+      "newbie": 0,
+      "channel": 0,
+      "segment": 0,
+      "visit": 0,
+      "conversion": 0,
+      "spend": 0
+    },
+    "exact_duplicate_feature_rows": 6562,
+    "duplicate_policy": "Retain exact duplicate rows: original dataset has no unique customer ID.",
+    "arm_counts": {
+      "No E-Mail": 21306,
+      "Mens E-Mail": 21307,
+      "Womens E-Mail": 21387
+    },
+    "zip_code_values": {
+      "Surburban": 28776,
+      "Urban": 25661,
+      "Rural": 9563
+    },
+    "outcome_anomalies": {
+      "conversion_without_visit": 0,
+      "positive_spend_without_conversion": 0,
+      "conversion_without_positive_spend": 0
+    }
+  },
+  "transformations": [
+    "Added source_row_number as 1-based positional technical key",
+    "Canonicalized 'Surburban' to 'Suburban' only in processed data",
+    "Preserved ALL input rows (no deduplication or imputation)"
+  ]
+}
