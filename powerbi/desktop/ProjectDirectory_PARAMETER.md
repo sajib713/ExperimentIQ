@@ -1,0 +1,1 @@
+Create Power Query Text parameter `ProjectDirectory` pointing to the Windows absolute root of an extracted Power BI rebuild ZIP or the master checkout, with no trailing slash. It is used by all 4 M queries; e.g. `C:\ExperimentIQ-PowerBI`. See `VISUAL_BLUEPRINT.md`.

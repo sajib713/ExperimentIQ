@@ -1,0 +1,34 @@
+// Create each measure separately in Modeling > New measure, after importing ArmKPIs, Comparisons and Segments.
+// All three tables are DISCONNECTED. Do NOT dynamically recompute p-values from filtered aggregates.
+Assigned Customers = SUM(ArmKPIs[assigned])
+Conversions = SUM(ArmKPIs[conversions])
+Visits = SUM(ArmKPIs[visits])
+Conversion Rate = DIVIDE([Conversions], [Assigned Customers])
+Visit Rate = DIVIDE([Visits], [Assigned Customers])
+Observed Gross Spend = SUM(ArmKPIs[spend_total])
+Gross Spend / Assigned = DIVIDE([Observed Gross Spend], [Assigned Customers])
+Selected Treatment = SELECTEDVALUE(Comparisons[treatment], "Mens E-Mail")
+Selected Treatment N =
+VAR arm = [Selected Treatment]
+RETURN CALCULATE(SUM(ArmKPIs[assigned]), FILTER(ALL(ArmKPIs), ArmKPIs[segment] = arm))
+Selected Treatment Conversion =
+VAR arm = [Selected Treatment]
+RETURN CALCULATE([Conversion Rate], FILTER(ALL(ArmKPIs), ArmKPIs[segment] = arm))
+Control Conversion = CALCULATE([Conversion Rate], FILTER(ALL(ArmKPIs), ArmKPIs[segment] = "No E-Mail"))
+Selected Absolute Lift (pp) = LOOKUPVALUE(Comparisons[conversion_lift_pp], Comparisons[treatment], [Selected Treatment])
+Selected Relative Lift = LOOKUPVALUE(Comparisons[relative_conversion_lift], Comparisons[treatment], [Selected Treatment])
+Selected CI Low (pp) = LOOKUPVALUE(Comparisons[conversion_ci_low_pp], Comparisons[treatment], [Selected Treatment])
+Selected CI High (pp) = LOOKUPVALUE(Comparisons[conversion_ci_high_pp], Comparisons[treatment], [Selected Treatment])
+Selected Holm p = LOOKUPVALUE(Comparisons[holm_adjusted_conversion_p], Comparisons[treatment], [Selected Treatment])
+Selected Visit Lift (pp) = LOOKUPVALUE(Comparisons[visit_lift_pp], Comparisons[treatment], [Selected Treatment])
+Selected Spend Lift per Assigned = LOOKUPVALUE(Comparisons[revenue_per_assigned_lift], Comparisons[treatment], [Selected Treatment])
+Selected Incremental Gross Spend Estimate = LOOKUPVALUE(Comparisons[incremental_spend_estimate_on_arm], Comparisons[treatment], [Selected Treatment])
+Primary Significance Verdict =
+VAR p = [Selected Holm p]
+RETURN IF(NOT ISBLANK(p) && p < 0.05, "Holm-adjusted significant", "Not significant")
+Show Control or Selected Treatment =
+VAR arm = SELECTEDVALUE(ArmKPIs[segment])
+VAR selectedArm = [Selected Treatment]
+RETURN IF(arm = "No E-Mail" || arm = selectedArm, 1, 0)
+// Both CIs are NON-multiplicity-adjusted 95% intervals. Use stored Comparisons statistics only.
+// Segments are exploratory; NEVER sum across different Segment dimensions because individuals repeat.
