@@ -2,7 +2,31 @@
 
 **Production-oriented portfolio code for analytics of the Hillstrom MineThatData Email Challenge**: reproducible processing, declarative SQL KPIs, randomized-inference decision engine, honest gross-spend impact analysis, a local interactive dashboard, Power BI authoring assets, and automated tests.
 
-> **REAL-DATA ANALYSIS VERIFIED (2026-10-15):** 64,000 Hillstrom records from a documented public mirror; actual conversion, visits, spend, confidence intervals, Holm-adjusted p-values and guarded business memo generated. GitHub Actions on Python 3.12 + PostgreSQL 16: **39 passed**, including live SQL/Python parity for all 3 arms. Original publisher HTTPS failed certificate verification; mirror SHA-256 is recorded, but publisher-original identity is not independently certified. The source CSV and customer-level processed rows remain Git-excluded. **No native Power BI .pbix exists** (Windows Desktop unavailable). This is a verified historical analysis, NOT a deployed production service. See `docs/REAL_DATA_VERIFICATION.md` and `docs/FINAL_AUDIT.md`.
+> **REAL-DATA ANALYSIS VERIFIED (2026-10-15):** 64,000 Hillstrom records from a documented public mirror; actual conversion, visits, spend, confidence intervals, Holm-adjusted p-values and guarded business memo generated. GitHub Actions on Python 3.12 + PostgreSQL 16: **39 passed**, including live SQL/Python parity for all 3 arms. Original publisher HTTPS failed certificate verification; mirror SHA-256 is recorded, but publisher-original identity is not independently certified. The source CSV and customer-level processed rows remain Git-excluded. **No native Power BI .pbix exists** (Windows Desktop unavailable); a verified aggregate-only rebuild ZIP and Chromium dashboard screenshot now exist. This is a verified historical analysis, NOT a deployed production service. See `docs/REAL_DATA_VERIFICATION.md` and `docs/FINAL_AUDIT.md`.
+
+## Portfolio-ready real-data dashboard and Power BI rebuild package (15 October 2026)
+
+![Chromium browser-verified real Hillstrom dashboard](docs/images/dashboard-real.png)
+
+The screenshot above is from the **64,000-record actual-data report**, not the 900-record synthetic fixture. [Browser E2E source](scripts/verify_dashboard.py) checks exact control/treatment cards, 578 conversions, $67,258.13 gross spend, Holm-adjusted p, 95% CI, interactive treatment change, confidence chart and segments. An opt-in synthetic demo is generated **only for isolation testing** and is never included in the actual report.
+
+- [View interactive HTML dashboard source](dashboard/index.html), [real report JSON](dashboard/data/report.json), [actual screenshot](docs/images/dashboard-real.png).
+- [Download complete Power BI Desktop rebuild ZIP](powerbi/ExperimentIQ-PowerBI-Rebuild.zip): 20 files (typed M imports, DAX, visual blueprint, data CSV/analysis/memo, source provenance, manifest). **This is a reproducible authoring archive, NOT a PBIX file.**
+- [Power BI four-page visual and validation blueprint](powerbi/desktop/VISUAL_BLUEPRINT.md), [DAX measures](powerbi/desktop/measures_aggregate.dax), [source-guarded Power Query M](powerbi/desktop/ArmKPIs.pq).
+- [Portfolio demonstration guide](docs/PORTFOLIO_SHOWCASE.md).
+- **Native PBIX remains unavailable:** the Linux runner cannot run Windows Power BI Desktop or certify PBIX authoring. The generated Power Query/DAX *source* has not been compiled in Power BI Desktop, so manually authoring, opening and visually checking a native PBIX on Windows is explicitly unfinished.
+- Keep all source, screenshots, archive and tests in this repository's `master` branch; `main` remains the preserved bootstrap branch.
+
+### Quick dashboard preview (using committed verified aggregates)
+
+```bash
+git clone --branch master https://github.com/sajib713/ExperimentIQ.git
+cd ExperimentIQ
+python -m http.server 8000 -d dashboard
+# Visit http://localhost:8000
+```
+
+**Source path** `dashboard/data/report.json` is committed with verified actual results; no raw customer data is required merely to preview this report. To refresh the underlying analysis instead, follow the earlier Python acquisition/pipeline and PostgreSQL instructions. To rebuild on Windows, extract `powerbi/ExperimentIQ-PowerBI-Rebuild.zip` and follow `powerbi/desktop/VISUAL_BLUEPRINT.md`. Historical mirror SHA-256 remains fixed in `docs/REAL_DATA_VERIFICATION.md`.
 
 ## Verified real-data results (source: public Hillstrom mirror)
 

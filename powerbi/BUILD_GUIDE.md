@@ -60,3 +60,9 @@ Report binary status: **NOT GENERATED / NOT VERIFIED**. Save your verified local
 6. Import `theme.json`. Reconcile the table with `reports/analysis_actual.json` and `reports/business_decision_memo_actual.md`. Save `ExperimentIQ.pbix` locally only after visually verifying the model/filters and data source.
 
 **Limitation:** These files constitute a reproducible Power BI authoring package, not a prebuilt or independently validated native `.pbix`. The aggregate-only report cannot implement all row-level drilldowns available from the uncommitted customer-level CSV.
+
+## Verified release alternative — no raw-data download needed
+
+The complete [Power BI rebuild ZIP](ExperimentIQ-PowerBI-Rebuild.zip) (not a PBIX) contains typed `powerbi/desktop/*.pq` queries for ArmKPIs, Comparisons, Segments and SourceMetadata, `measures_aggregate.dax`, theme, all verified actual aggregate CSV, `analysis_actual.json`, the full memo and source-provenance files. Extract to Windows and follow `powerbi/desktop/VISUAL_BLUEPRINT.md`. This is the preferred **aggregate-only** path: no need to download, embed, or redistribute customer rows. Source file SHA and 64,000-cohort checks run in the Python pipeline; M performs additional basic shape/KPI consistency checks (Power BI Desktop M evaluation has NOT been executed in this Linux environment).
+
+The dashboard screenshot at `docs/images/dashboard-real.png` proves **Chromium validation of the browser-based dashboard**, not a Power BI Desktop report. A valid native PBIX requires saving, refreshing, and verifying in Windows Power BI Desktop.
