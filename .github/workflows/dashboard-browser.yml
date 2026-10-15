@@ -1,0 +1,49 @@
+name: Browser-verify real dashboard and publish reproducible Power BI assets
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'dashboard/app.js'
+      - 'dashboard/index.html'
+      - 'dashboard/style.css'
+      - 'powerbi/desktop/**'
+      - 'scripts/verify_dashboard.py'
+      - 'scripts/build_powerbi_package.py'
+      - '.github/workflows/dashboard-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  visual-real-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Playwright Chromium
+        run: |
+          python -m pip install 'playwright>=1.55,<1.60'
+          python -m playwright install --with-deps chromium
+      - name: Real-data screenshot and synthetic isolation E2E
+        run: |
+          python scripts/verify_dashboard.py
+          test -s docs/images/dashboard-real.png
+      - name: Assemble reproducible Power BI archive, verified real aggregates only
+        run: |
+          python scripts/build_powerbi_package.py
+          test -s powerbi/ExperimentIQ-PowerBI-Rebuild.zip
+      - name: Commit audited screenshot and Power BI package to master
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/images/dashboard-real.png
+          git add -f powerbi/ExperimentIQ-PowerBI-Rebuild.zip
+          if ! git diff --cached --quiet; then
+            git diff --cached --check
+            git commit -m 'Publish Chromium-verified real dashboard and Power BI rebuild package'
+            git push origin HEAD:master
+          fi
