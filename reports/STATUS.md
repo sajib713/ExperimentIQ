@@ -1,13 +1,13 @@
-# Business decision memo — status / truthful outcome
+# ExperimentIQ — real-data business memo status
 
-**BLOCKED: actual Hillstrom CSV was not downloadable from the build sandbox.**
+**GENERATED AND VERIFIED FROM THE DOCUMENTED HILLSTROM PUBLIC MIRROR** (15 October 2026, 64,000 original-schema customer records). The actual-data report is `reports/business_decision_memo_actual.md`. Read `docs/REAL_DATA_VERIFICATION.md` for source SHA-256, provenance limitation, and 3/3 PostgreSQL SQL–Python reconciliation.
 
-The report generator is implemented in `src/experimentiq/report.py`. It will write `business_decision_memo_actual.md` **only after** 64,000 raw CSV rows pass validation and the local pipeline completes. No business results or p-values are hard-coded. Test fixture metrics are never presented as actual experiment results.
+The publisher's HTTPS endpoint failed certificate validation, so the pipeline used a documented mirror; the mirror matches the public schema and expected sample size, but no publisher-provided checksum establishes exact identity with the original.
 
-The real memo will include business question, source SHA/provenance, assigned sample size per arm, conversion / visit / spend KPIs, Newcombe intervals, Holm-adjusted p-values, SRM, spend bootstrap intervals, guarded recommendations, missing business inputs and limits.
+**Summary:** Mens E-Mail (1.253%) and Womens E-Mail (0.884%) exceed control (0.573%) conversion. Both Holm-adjusted comparisons pass p<0.05, while Mens has the larger positive difference. Gross spend is NOT net profit or ROI. Recommended follow-up requires margin/cost/exposure data.
 
-To generate: `python -m experimentiq.cli all`. **Do not take business action based on an absent or synthetic analysis.**
+**Tests:** 39 passed on GitHub Actions Python 3.12 + ephemeral PostgreSQL 16; local test environment 38 passed and 1 PostgreSQL-specific skip.
 
-**Optional UI demo:** `python -m experimentiq.cli demo` generates 900 **SYNTHETIC, FABRICATED** rows. See `data/synthetic/README.md`. Do not cite the invented treatment effects.
+**Synthetic:** `data/synthetic/` and `dashboard/data/demo.json` are fabricated and explicitly not source data.
 
-**GitHub publishing:** connector write calls currently fail HTTP 403 (installation absent). Local Git commit only; no remote push claimed.
+**Power BI:** DAX/M/theme/build guide exist, but a native `.pbix` was not created on the Linux runner. Rebuild using `powerbi/BUILD_GUIDE.md`.

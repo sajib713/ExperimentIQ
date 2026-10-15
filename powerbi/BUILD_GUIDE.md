@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-1. Acquire the original 2008 dataset and run `python -m experimentiq.cli all` successfully.
+1. For a complete row-level report, download the documented Hillstrom data independently (as allowed) with `python -m experimentiq.cli acquire` or, if the original host is unavailable, `python -m experimentiq.cli acquire --mirror`, then run `python -m experimentiq.cli all`. Verify the source SHA against `docs/REAL_DATA_VERIFICATION.md`. Alternatively, for **aggregate-only reporting without customer rows**, use the already committed `reports/arm_kpis_actual.csv`, `reports/control_comparisons_actual.csv` and `reports/segment_kpis_actual.csv`; the row-level measures do not apply to this aggregate-only mode.
 2. Launch Power BI Desktop. Import `theme.json` at **View > Themes > Browse for themes**.
 3. Set a Power Query text parameter `ProjectDirectory` pointing to your local clone (Windows path with no trailing slash). **Get data > Blank query > Advanced Editor**, paste `transform.pq`, set its query name to `Customers`, apply. Or import `data/processed/experiment_customers.csv` directly with explicitly verified data types.
 4. Import `reports/control_comparisons_actual.csv` as `Comparisons`, `reports/segment_kpis_actual.csv` as `Segments` for optional exploratory tables; do not create fact-to-fact many-to-many relationships. Prefer displaying these as disconnected reporting tables.
@@ -49,3 +49,14 @@
 - Verify `Power BI > Refresh` works after data changes and that raw CSV is not embedded/published without usage permission.
 
 Report binary status: **NOT GENERATED / NOT VERIFIED**. Save your verified local file as `powerbi/ExperimentIQ.pbix` only after completing the steps above.
+
+## Aggregate-only reproducible option (no raw-data redistribution)
+
+1. Check out the private repository's `master` branch. In Windows Power BI Desktop, **Get Data > Text/CSV** and import `reports/arm_kpis_actual.csv` as `ArmKPIs`, `reports/control_comparisons_actual.csv` as `Comparisons`, and `reports/segment_kpis_actual.csv` as `Segments`.
+2. Set `ArmKPIs[segment]` to Text, `assigned`/`conversions`/`visits` to Whole Number, and conversion/visit/spend fields to Decimal Number. Validate exactly 3 arm rows, counts 21,306 / 21,307 / 21,387, and 64,000 total.
+3. Build three cards for `SUM(ArmKPIs[assigned])`, `SUM(ArmKPIs[conversions])` and `SUM(ArmKPIs[spend_total])`. **Do not average arm conversion rates**: use `DIVIDE(SUM(ArmKPIs[conversions]), SUM(ArmKPIs[assigned]))` for a weighted overall conversion KPI.
+4. Plot arm conversion rates using `ArmKPIs[segment]` with `ArmKPIs[conversion_rate]`. Put comparisons, confidence bounds, Holm p-values in a **static unfiltered table** (these tests are defined on the full sample).
+5. Use a disconnected `Segments` table for subgroup exploration. Slicers on one table do NOT re-estimate the full-population p-values in `Comparisons`; label this visibly.
+6. Import `theme.json`. Reconcile the table with `reports/analysis_actual.json` and `reports/business_decision_memo_actual.md`. Save `ExperimentIQ.pbix` locally only after visually verifying the model/filters and data source.
+
+**Limitation:** These files constitute a reproducible Power BI authoring package, not a prebuilt or independently validated native `.pbix`. The aggregate-only report cannot implement all row-level drilldowns available from the uncommitted customer-level CSV.

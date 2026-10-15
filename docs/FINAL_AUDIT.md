@@ -1,53 +1,49 @@
-# ExperimentIQ release audit — 15 October 2026
+# ExperimentIQ — Updated release audit (15 October 2026)
 
-## Overall judgement
+## Evidence-based release status
+**Real-data analytics: VERIFIED against the documented public mirror and PostgreSQL in GitHub Actions. Full application production deployment and native Power BI binary: NOT VERIFIED.** No synthetic records are used in the actual memo.
 
-**PARTIALLY IMPLEMENTED, NOT ACCEPTANCE COMPLETE.** Local repository implementation, fixture-based tests, SQL/Python analytic code, dashboard UI and Power BI source assets are prepared. Actual dataset acquisition and consequent real-data analysis/decision memo are **BLOCKED** by no external DNS/network access. PostgreSQL, Docker and Power BI Desktop were unavailable. No source CSV, statistical p-value, screenshot of a populated real dashboard or `.pbix` is fabricated.
+### Actual source and transformations
+- Publisher: Kevin Hillstrom, MineThatData 2008 E-Mail Analytics Challenge; documented public analysis invitation, no explicit dataset redistribution license.
+- Acquired from publicly accessible GitHub mirror after publisher HTTPS certificate validation failed in the GitHub runner.
+- SHA-256: `27bab8c5d3669f26ec08ebb50a0a78317542f29501156f2e2af6781fab4cd7e2`.
+- 64,000 rows, 12 source columns, all 3 arms; no missing values; 6,562 exact duplicate *records* retained (no customer ID to prove duplicate people). Raw "Surburban" standardized to "Suburban" only in derived data. No deletion/imputation.
+- Published mirror authenticity against an original publisher checksum: **UNVERIFIED**, since publisher does not supply a checksum.
+- Raw customer rows and processed CSV: **not committed**.
 
-## Verified toolchain
+### Actual observed arm metrics
+| Assigned group | N | Conversions | Rate | Visits | Total 2-week spend |
+|---|---:|---:|---:|---:|---:|
+| No E-Mail | 21,306 | 122 | 0.5726% | 2,262 | $13,908.33 |
+| Mens E-Mail | 21,307 | 267 | 1.2531% | 3,894 | $30,311.69 |
+| Womens E-Mail | 21,387 | 189 | 0.8837% | 3,238 | $23,038.11 |
 
-- Python 3.13.5; pandas 2.2.3; NumPy 2.3.5; SciPy 1.17.0; statsmodels 0.14.6; pytest 9.0.2; Node.js 22.16.0; Git 2.47.3.
-- PostgreSQL CLI/server: **NOT INSTALLED / NOT RUN**; Docker CLI: **NOT INSTALLED / NOT RUN**; Power BI Desktop: **NOT AVAILABLE** (Linux host).
-- `python -m pytest -q` latest execution: **38 passed, 1 skipped** (the skip is live PostgreSQL integration because `TEST_DATABASE_URL` was not configured). Synthetic fixture tested the data pipeline, memo exporter, dashboard JSON, statistical formulas, SQL-derived relational views in SQLite and reproducibility. These are not actual Hillstrom experimental results.
-- `node --check dashboard/app.js`: **exit 0 / syntax valid**, not a verified Chromium GUI acceptance test.
-- `python -m experimentiq.cli acquire`: **exit 2** (`URLError`, DNS name resolution failure), no dataset acquired.
-- `python -m experimentiq.cli profile`: **exit 2** (`FileNotFoundError` missing source CSV).
-- `python -m experimentiq.cli all`: **exit 2** (`FileNotFoundError` missing source CSV).
-- `scripts/verify_release.py` verifies checked-in structure and reports **presence** of deliverables; it does not substitute for runtime integrations.
+### Inferential checks
+- Conversion Mens-control: +0.6805 pp, unadjusted 95% Newcombe CI [+0.5014,+0.8641] pp, two-comparison Holm p = 3.0464e-13.
+- Conversion Womens-control: +0.3111 pp, unadjusted 95% Newcombe CI [+0.1502,+0.4745] pp, Holm p = 0.0001571.
+- SRM: chi-square 0.20253, p = 0.90369 (threshold 0.001; no flag).
+- Spend: estimated difference per assigned $+0.7698 (Mens) or $+0.4244 (Womens). These are gross-spend differences, not ROI or realized incremental ledger sales.
+- Men-vs-women direct contrast is exploratory; population transportability and individual campaign exposure are unverified.
 
-## Acceptance checklist, requirement by requirement
-
-| Requirement | State | Evidence / missing validation |
+### Acceptance audit
+| Requirement | State | Evidence |
 |---|---|---|
-| Dataset publisher, source, schema and terms documented | COMPLETE (documentation) | `docs/DATA_SOURCES.md`, `docs/DATA_DICTIONARY.md` (rights unspecified) |
-| Original CSV obtained and independently profiled | BLOCKED | Network DNS failure; no raw data in repo |
-| Cleaning, validation, missing/duplicates checking | IMPLEMENTED / FIXTURE VERIFIED | `data.py`, test suite; real row statistics unavailable |
-| Deterministic row-preserving pipeline | IMPLEMENTED / FIXTURE VERIFIED | SHA-256 fixture repeatability; 64k source not verified |
-| PostgreSQL schema and transactional loader | IMPLEMENTED / UNVERIFIED ON POSTGRESQL | SQL/psycopg code and dedicated server integration test, skipped locally |
-| Reusable SQL views, business KPIs and denominators | IMPLEMENTED / FIXTURE VERIFIED | SQLite relational view checks vs pandas; actual PostgreSQL parity pending |
-| Randomized treatment / SRM / covariate balance | IMPLEMENTED / FIXTURE VERIFIED | `stats.py`, `balance.py`; actual SRM unavailable |
-| Valid statistical tests, CIs and multiplicity | IMPLEMENTED / FIXTURE VERIFIED | scipy/statsmodels, 2-arm Holm correction, Newcombe intervals, Welch/bootstrap |
-| Actual conversion lift, p-values, impact estimates | BLOCKED | No original CSV; no raw results invented |
-| No unsupported ROI / profits | COMPLETE | ROI explicitly uncomputed; guardrails in report generator and docs |
-| Dashboard interactive visuals and source code | IMPLEMENTED / STATIC VERIFIED | `dashboard/`; JS syntax checked; real-data population pending |
-| Native Power BI `.pbix` / `.pbit` | NOT PRODUCED | Desktop unavailable; explicit M/DAX/theme/report blueprint shipped |
-| Business memo with actual findings | BLOCKED | `report.py` implementation; `reports/STATUS.md` is honest blocker report |
-| Automated test execution | COMPLETE (local fixture coverage) | pytest 38 passed, 1 skipped; test log included |
-| Docker PostgreSQL run verified | BLOCKED | Docker unavailable |
-| README, architecture, data dictionary, KPI, methodology | COMPLETE | `README.md`, docs files |
-| Git local repository | COMPLETE | Locally initialized and committed; remote GitHub target authenticated, source push not completed |
-| GitHub CI workflow | CONFIGURED / NOT RUN | `.github/workflows/ci.yml`; not pushed, so no Actions run |
-| Real-data end-to-end execution | BLOCKED | Missing source CSV |
-| SQL/Python results consistent on real data | NOT VERIFIED | `verify-db` requires PostgreSQL + source; fixture view parity passed |
+| Obtain usable real Hillstrom data | VERIFIED FROM MIRROR | provenance URL/SHA in docs/REAL_DATA_VERIFICATION.md |
+| Original-publisher checksum equivalence | UNVERIFIED | source publisher does not provide checksum; HTTPS connection validation failed |
+| Source profiling, schema, null and anomaly checks | VERIFIED | reports/profile_actual.json |
+| Cleaning, deterministic pipeline and lineage | VERIFIED ON SOURCE | SHA-256 + processed manifest + real-data batch |
+| PostgreSQL transactional load and real SQL/Python parity | VERIFIED IN EPHEMERAL CI | 3/3 arm match, PostgreSQL 16 |
+| Correct ITT KPIs and denominators | VERIFIED | reports/arm_kpis_actual.csv, SQL views |
+| 2 pre-specified control tests, Newcombe CI and Holm | VERIFIED | reports/analysis_actual.json |
+| SRM and pre-treatment balance diagnostics | VERIFIED | reports/analysis_actual.json |
+| Gross-spend uncertainty / guarded business impacts | VERIFIED | bootstrap CI in analysis and memo |
+| No unsupported ROI claim | VERIFIED | business memo explicitly disclaims margins and costs |
+| Segments and interactive HTML dashboard data | GENERATED; BROWSER VISUAL QA NOT VERIFIED | dashboard/data/report.json; HTML/JS source, JS syntax test |
+| Native Power BI .pbix | NOT GENERATED | Power BI Desktop unavailable; DAX/M/theme/build guide |
+| Real business decision memo | GENERATED FROM VERIFIED MIRROR | reports/business_decision_memo_actual.md |
+| Pytest & PostgreSQL integration | 39 PASSED ON GITHUB ACTIONS | .github/workflows/real-data.yml |
+| Local sandbox tests | 38 PASSED, 1 SKIPPED | No PostgreSQL installed in local container |
+| Documentation / code / SQL / CI | PUBLISHED | master branch |
+| Live production uptime/monitoring/security audit | NOT VERIFIED | This is a reproducible analytics portfolio, not deployed SaaS |
 
-## Synthetic demo for UI testing
-
-`python -m experimentiq.cli demo` creates a clearly marked 900-row synthetic CSV and `dashboard/data/demo.json`, displayed only at `/?demo=1`. Neither output is used as the real Hillstrom source or its derived analysis. Synthetic demo outputs are **not real results**, and the dashboard makes this explicit. Four added tests verify deterministic generation, invalid inputs, source isolation and clear labeling. Local total: 38 passed, 1 PostgreSQL integration skipped.
-
-## GitHub publication status
-
-The private target is `sajib713/ExperimentIQ`. The authenticated `sajib713` GitHub integration can now read its metadata and sees an installed GitHub App with all-repository selection. An attempted `create_blob` on the entirely empty repository returned HTTP 409 (`Git Repository is empty`), not a successful write. Direct `git push` remains inaccessible from this execution container because DNS resolution of `github.com` fails. No publication is claimed until GitHub's remote commit and repository files are verified.
-
-## Best next action
-
-Obtain `hillstrom.csv` legally on an Internet-connected Windows/Linux machine, run `python -m experimentiq.cli all`, then Docker PostgreSQL integration, SQL parity, dashboard inspection, and Power BI Desktop verification. Record resulting source SHA and actual metrics before claiming this project as a completed analytical portfolio artifact.
+**Important:** Every `*_actual` report is from the real-data workflow. Every `data/synthetic/` file and `dashboard/data/demo.json` is a separately marked fabricated demonstration.

@@ -28,3 +28,7 @@ python -m experimentiq.cli verify-db
 ```
 
 If the CSV changes, explicitly rerun `python -m experimentiq.cli pipeline` then `analyze`; do not edit processed files or manifests by hand. A matched fingerprint alone is insufficient to call the pipeline production-verified: run database integration and compare actual results, then open Power BI Desktop to validate report interactions and numerical consistency.
+
+## Verified real-data update (2026-10-15)
+
+Earlier limitations above describe the **original local sandbox only** and are superseded where indicated by the GitHub-hosted verified workflow. GitHub Actions installed PostgreSQL 16, ran all **39 tests**, acquired 64,000 actual-schema records via the documented third-party mirror, verified the SHA-256 lineage and transactional PostgreSQL upload, and checked SQL/Python KPI equality for all three arms. Source rows were not committed, and a native Power BI binary has not been produced. See `docs/REAL_DATA_VERIFICATION.md` and `docs/FINAL_AUDIT.md`.

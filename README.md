@@ -2,7 +2,26 @@
 
 **Production-oriented portfolio code for analytics of the Hillstrom MineThatData Email Challenge**: reproducible processing, declarative SQL KPIs, randomized-inference decision engine, honest gross-spend impact analysis, a local interactive dashboard, Power BI authoring assets, and automated tests.
 
-> **CURRENT BUILD STATUS — PARTIALLY COMPLETE / DATA BLOCKED (38 tests passed; 1 live PostgreSQL test skipped).** The initial execution sandbox had no outbound DNS/network to download Hillstrom CSV, no PostgreSQL/Docker server and no Windows Power BI Desktop. Therefore **no actual experimental findings, verified PostgreSQL integration or Power BI binary are claimed**. Synthetic fixture tests are exclusively unit tests, not real Hillstrom results. See `docs/FINAL_AUDIT.md`.
+> **REAL-DATA ANALYSIS VERIFIED (2026-10-15):** 64,000 Hillstrom records from a documented public mirror; actual conversion, visits, spend, confidence intervals, Holm-adjusted p-values and guarded business memo generated. GitHub Actions on Python 3.12 + PostgreSQL 16: **39 passed**, including live SQL/Python parity for all 3 arms. Original publisher HTTPS failed certificate verification; mirror SHA-256 is recorded, but publisher-original identity is not independently certified. The source CSV and customer-level processed rows remain Git-excluded. **No native Power BI .pbix exists** (Windows Desktop unavailable). This is a verified historical analysis, NOT a deployed production service. See `docs/REAL_DATA_VERIFICATION.md` and `docs/FINAL_AUDIT.md`.
+
+## Verified real-data results (source: public Hillstrom mirror)
+
+Run on GitHub Actions: **2026-10-15**, [real-data analysis workflow](https://github.com/sajib713/ExperimentIQ/actions), exact CSV SHA-256: `27bab8c5d3669f26ec08ebb50a0a78317542f29501156f2e2af6781fab4cd7e2`. Sample = 64,000 randomized customer assignments, **not synthetic**. Source publisher described the experiment, but no original publisher-provided checksum exists to independently certify the third-party mirror.
+
+| Arm | Assigned | Conversions | Conversion rate | Visits | 2-week observed gross spend (USD) |
+|---|---:|---:|---:|---:|---:|
+| No E-Mail (control) | 21,306 | 122 | 0.5726% | 2,262 | 13,908.33 |
+| Mens E-Mail | 21,307 | 267 | 1.2531% | 3,894 | 30,311.69 |
+| Womens E-Mail | 21,387 | 189 | 0.8837% | 3,238 | 23,038.11 |
+
+- **Mens vs control:** +0.6805 percentage points (unadjusted Newcombe 95% CI +0.5014 to +0.8641 pp); Holm-adjusted p = 3.05e-13.
+- **Womens vs control:** +0.3111 percentage points (unadjusted Newcombe 95% CI +0.1502 to +0.4745 pp); Holm-adjusted p = 1.57e-4.
+- **SRM diagnostic:** chi-square 0.2025, p = 0.9037 (threshold 0.001, not flagged).
+- **Observed spend/customer uplift:** Mens +$0.7698 (bootstrap 95% CI +$0.4813 to +$1.0533), Womens +$0.4244 (CI +$0.1710 to +$0.6930). These are **gross-spend differences, not profit/ROI**.
+- **Decision:** Mens E-Mail has the larger statistically supported conversion gain. Recommend a monitored, gated follow-up rollout/test, subject to delivery, marginal cost, contribution margin and unsubscribe information. Do not extrapolate a profit claim.
+- **Actual deliverables:** [memo](reports/business_decision_memo_actual.md), [analysis JSON](reports/analysis_actual.json), [arm KPIs](reports/arm_kpis_actual.csv), [treatment contrasts](reports/control_comparisons_actual.csv), [profiling](reports/profile_actual.json), [real dashboard JSON](dashboard/data/report.json). Real summaries are separate from `data/synthetic/` and `dashboard/data/demo.json`.
+
+**Branch note:** `master` contains the complete six-commit original project history plus verified releases; GitHub's separately preserved `main` branch is a bootstrap/transfer branch. Clone `--branch master` as above, not the default `main`.
 
 ## Why this is more than a notebook
 
@@ -17,7 +36,7 @@
 ## Quick start (Python 3.10+, Internet-enabled machine)
 
 ```bash
-git clone <YOUR-REPO-URL> ExperimentIQ
+git clone --branch master https://github.com/sajib713/ExperimentIQ.git ExperimentIQ
 cd ExperimentIQ
 python -m venv .venv
 # Linux/macOS:
@@ -54,13 +73,13 @@ cp .env.example .env
 # EDIT .env POSTGRES_PASSWORD; make DATABASE_URL use the SAME secret. Do NOT commit .env.
 set -a; source .env; set +a           # bash/zsh only; PowerShell: set env vars manually
 # Start database; Docker must be installed
-# docker compose up -d postgres
+docker compose up -d postgres
 python -m experimentiq.cli load-db     # uses transaction, staging, indexed table, views
 python -m experimentiq.cli verify-db   # compares actual PostgreSQL vs Python KPI results
 # Additional SQL via: psql "$DATABASE_URL" -f sql/003_quality_checks.sql
 ```
 
-**Power BI Desktop**: follow [`powerbi/BUILD_GUIDE.md`](powerbi/BUILD_GUIDE.md) to create/verify the report from generated CSVs, import theme, Power Query and DAX. This build has **not** produced a PBIX artifact.
+**Power BI Desktop**: The complete report has NOT been authored or visually validated as a `.pbix`. For a reproducible native report, follow [`powerbi/BUILD_GUIDE.md`](powerbi/BUILD_GUIDE.md) to create/verify the report from generated CSVs, import theme, Power Query and DAX. This build has **not** produced a PBIX artifact.
 
 ## Repository layout
 
@@ -97,4 +116,4 @@ See [`docs/RELEASE_HARDENING.md`](docs/RELEASE_HARDENING.md), [`docs/KPI_SPEC.md
 
 ## What is **not** claimed
 
-Raw source dataset redistribution rights; a verified published-source checksum; actual conversion lift/p-values; campaign profit, causal open-rate impact or ROI; deployed production uptime; independently verified Docker/PG/PBIX within the original sandbox. These are documented and deliberately not fabricated.
+Raw source dataset redistribution rights; a publisher-confirmed CSV checksum or mirror authenticity; campaign profit, causal open-rate effect or ROI; long-term transportability; deployed production uptime; a native or user-validated Power BI report. GitHub Actions *did* verify temporary PostgreSQL 16 parity and 39 tests. These are documented and deliberately not fabricated.
