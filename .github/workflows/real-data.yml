@@ -1,0 +1,136 @@
+name: Real Hillstrom data analysis and PostgreSQL verification
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/real-data.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: experimentiq-real-analysis
+  cancel-in-progress: false
+
+jobs:
+  analyze-real-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: experimentiq_test
+          POSTGRES_USER: experimentiq_test
+          POSTGRES_PASSWORD: ephemeral_ci_only_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U experimentiq_test -d experimentiq_test"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      TEST_DATABASE_URL: postgresql://experimentiq_test:ephemeral_ci_only_password@localhost:5432/experimentiq_test
+      DATABASE_URL: postgresql://experimentiq_test:ephemeral_ci_only_password@localhost:5432/experimentiq_test
+    steps:
+      - name: Checkout exact original project history
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned-range project dependencies
+        run: python -m pip install -e '.[dev,postgres]'
+      - name: Verify tests against live temporary PostgreSQL
+        run: python -m pytest -q
+      - name: Acquire actual Hillstrom CSV, original first then documented mirror
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! python -m experimentiq.cli acquire; then
+            echo "::warning::Original HTTPS download unavailable; falling back to explicitly documented third-party mirror."
+            python -m experimentiq.cli acquire --mirror
+          fi
+          python -m experimentiq.cli profile > "${RUNNER_TEMP}/real_profile.json"
+      - name: Run audited real-data analysis (no synthetic data)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m experimentiq.cli all > "${RUNNER_TEMP}/real_summary.json"
+          python -m experimentiq.cli verify-db >/dev/null 2>&1 && { echo "::error::Unexpected prior database content"; exit 1; } || true
+          python -m experimentiq.cli load-db > "${RUNNER_TEMP}/load_db_result.json"
+          python -m experimentiq.cli verify-db > "${RUNNER_TEMP}/postgres_parity.json"
+          node --check dashboard/app.js
+      - name: Assert real source, lineage, and SQL parity and write provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('.')
+          src = json.loads((root/'data/raw/hillstrom.source.json').read_text())
+          profile = json.loads((root/'reports/profile_actual.json').read_text())
+          analysis = json.loads((root/'reports/analysis_actual.json').read_text())
+          parity = json.loads(Path(__import__('os').environ['RUNNER_TEMP'],'postgres_parity.json').read_text())
+          assert analysis['n']==64000 == src['rows']==profile['profile']['rows']
+          assert set(analysis['groups']) == {'No E-Mail','Mens E-Mail','Womens E-Mail'}
+          assert len(parity)==3 and all(x['status']=='matched' for x in parity)
+          assert profile['raw_sha256']==src['sha256']
+          assert (root/'dashboard/data/report.json').is_file()
+          assert not analysis['srm']['flag'], 'Sample ratio mismatch: do not recommend roll-out automatically'
+          lines = [
+           '# Verified Hillstrom real-data provenance — ExperimentIQ',
+           '',
+           '**Dataset:** Hillstrom / MineThatData 2008 E-Mail Analytics Challenge (64,000 randomized assignments).',
+           '**Source URL:** ' + src['source_url'],
+           '**Source class:** ' + src['source_type'],
+           '**SHA-256:** `' + src['sha256'] + '`',
+           '**Rows and variables:** ' + str(src['rows']) + ' rows, ' + str(len(src['original_columns'])) + ' original columns.',
+           '**Raw dataset storage:** local/ephemeral CI only; deliberately NOT committed or uploaded.',
+           '**Transformations:** 1-based positional source_row_number and Surburban -> Suburban spelling correction in processed copy. All 64,000 rows retained.',
+           '**PostgreSQL:** live PostgreSQL 16 load and 3/3 arm-level SQL/Python KPI parity verified in ephemeral CI.',
+           '**Statistics:** see reports/analysis_actual.json and reports/business_decision_memo_actual.md; confidence intervals are unadjusted and Holm applies to the 2 primary conversion p-values.',
+           '**Business restriction:** no advertising costs, margins, delivery/open tracking or ROI in source.',
+           '**License:** publisher invited public analysis but provided no explicit standard redistribution license. The source CSV and row-level processed CSV are excluded.',
+           '**Provenance caveat:** a mirror is not a cryptographic publisher-verified original; this file records the exact downloaded SHA and URL, not independent authenticity certification.',
+           '**Synthetic demo:** data/synthetic/* and dashboard/data/demo.json are demonstrative and never merged with actual analysis.',
+           '**Native .pbix:** not produced; Windows Power BI Desktop required. DAX/M/theme and reproducible guide are provided.',
+           ''
+          ]
+          (root/'docs/REAL_DATA_VERIFICATION.md').write_text('\n'.join(lines),encoding='utf-8')
+          print('Real data SHA256:',src['sha256'])
+          print('Source class:',src['source_type'])
+          print('Arm sizes:',{k:v['assigned'] for k,v in analysis['groups'].items()})
+          print('PostgreSQL parity:',len(parity),'arms')
+          PY
+      - name: Publish only verified aggregate outputs and memo (never raw rows)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/REAL_DATA_VERIFICATION.md
+          git add -f reports/profile_actual.json reports/analysis_actual.json reports/arm_kpis_actual.csv reports/control_comparisons_actual.csv reports/segment_kpis_actual.csv reports/business_decision_memo_actual.md dashboard/data/report.json
+          git diff --cached --check
+          git diff --cached --name-only | tee "${RUNNER_TEMP}/published_paths.txt"
+          if grep -Eq '^data/(raw|processed)/' "${RUNNER_TEMP}/published_paths.txt"; then echo 'Source rows must not be published'; exit 1; fi
+          git commit -m 'Publish verified Hillstrom aggregate findings, PostgreSQL parity and decision memo'
+          git push origin HEAD:master
+          echo "Real dataset analysis and memo published to master." >> "${GITHUB_STEP_SUMMARY}"
+      - name: Preserve aggregated evidence as CI artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: experimentiq-real-analytics-evidence
+          path: |
+            reports/*actual*
+            dashboard/data/report.json
+            docs/REAL_DATA_VERIFICATION.md
+          if-no-files-found: warn
+          retention-days: 30
