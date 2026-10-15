@@ -71,7 +71,7 @@ def build_memo(res:dict, raw_sha:str, provenance:str)->str:
        '', '## Reproducibility',
        '`python -m experimentiq.cli all` generates this memo from the checked raw dataset; '
        'see `reports/analysis_actual.json` and dashboard sources. No hard-coded outcome numbers are used.', ''])
-    return '\n'.join(lines)
+    return '\n'.join(line.rstrip() for line in lines)
 
 def export_results(clean_df:pd.DataFrame, raw_path:Path=RAW, reports_dir:Path=REPORTS, dashboard_path:Path=DASHBOARD_DATA, iterations:int=1500)->dict:
     results=analyze(clean_df,bootstrap_iterations=iterations)
