@@ -28,6 +28,10 @@ jobs:
         run: |
           python -m pip install 'playwright>=1.55,<1.60'
           python -m playwright install --with-deps chromium
+      - name: Generate opt-in synthetic fixture for isolation test only
+        run: |
+          python -m pip install -e .
+          python -m experimentiq.cli demo
       - name: Real-data screenshot and synthetic isolation E2E
         run: |
           python scripts/verify_dashboard.py
