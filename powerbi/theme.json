@@ -1,0 +1,6 @@
+{
+  "name": "ExperimentIQ Analytical Dark",
+  "dataColors": ["#4BD6AE", "#A991ED", "#8493AB", "#629DF9", "#F5C578"],
+  "background": "#080D19", "foreground": "#E6EEF9", "tableAccent": "#4BD6AE",
+  "visualStyles": {"*":{"*":{"title":[{"fontColor":{"solid":{"color":"#E6EEF9"}},"fontSize":12}]}}}
+}

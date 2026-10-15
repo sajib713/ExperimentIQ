@@ -1,0 +1,35 @@
+-- Power BI Model > New measure; table name = Customers.
+-- SOURCE: data/processed/experiment_customers.csv (created only after validation)
+Assigned Customers = COUNTROWS(Customers)
+
+Conversions = SUM(Customers[conversion])
+
+Conversion Rate = DIVIDE([Conversions], [Assigned Customers])
+
+Visits = SUM(Customers[visit])
+
+Visit Rate = DIVIDE([Visits], [Assigned Customers])
+
+Observed Spend = SUM(Customers[spend])
+
+Spend per Assigned = DIVIDE([Observed Spend], [Assigned Customers])
+
+Control Conversion Rate =
+CALCULATE([Conversion Rate], REMOVEFILTERS(Customers[segment]), Customers[segment] = "No E-Mail")
+
+Conversion Lift vs Control (pp) =
+100 * ([Conversion Rate] - [Control Conversion Rate])
+
+Relative Conversion Lift vs Control =
+DIVIDE([Conversion Rate] - [Control Conversion Rate], [Control Conversion Rate])
+
+Control Spend per Assigned =
+CALCULATE([Spend per Assigned], REMOVEFILTERS(Customers[segment]), Customers[segment] = "No E-Mail")
+
+Spend Lift per Assigned = [Spend per Assigned] - [Control Spend per Assigned]
+
+-- WARNING: The control-lift measure on a control row equals zero.
+-- Filtering to post-treatment outcomes (conversion, visit, spend) biases cohort comparisons.
+-- For statistically valid adjusted p-values, use the unfiltered, Python-generated
+-- control_comparisons_actual.csv table. Do NOT assume these p-values remain valid
+-- when slicers change the population. Segment metrics are exploratory only.

@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.DS_Store
+.coverage
+htmlcov/
+data/raw/*.csv
+data/processed/*.csv
+reports/figures/*.png
+reports/*_actual.*
+reports/profile_actual.json
+reports/analysis_actual.json
+dashboard/data/report.json

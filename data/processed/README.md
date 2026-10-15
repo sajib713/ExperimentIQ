@@ -1,0 +1,1 @@
+`experiment_customers.csv` is a **generated** cleaned derivative and is Git-ignored. It contains a technical row number, not a real ID. Never publish processed customer-level data without evaluating dataset rights.

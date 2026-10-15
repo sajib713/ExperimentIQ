@@ -1,0 +1,51 @@
+# ExperimentIQ — Power BI Desktop authoring guide
+
+**Power BI Desktop is Windows-only and is not available in the execution environment that built this repository.** Consequently, no `.pbix`, `.pbit`, or `.pbip` report has been fabricated. The checked-in assets are **DAX measures, a Power Query M import, a visual theme and precise construction steps**. The separately built `dashboard/` is a functional browser-based dashboard that needs actual report data.
+
+## Prerequisites
+
+1. Acquire the original 2008 dataset and run `python -m experimentiq.cli all` successfully.
+2. Launch Power BI Desktop. Import `theme.json` at **View > Themes > Browse for themes**.
+3. Set a Power Query text parameter `ProjectDirectory` pointing to your local clone (Windows path with no trailing slash). **Get data > Blank query > Advanced Editor**, paste `transform.pq`, set its query name to `Customers`, apply. Or import `data/processed/experiment_customers.csv` directly with explicitly verified data types.
+4. Import `reports/control_comparisons_actual.csv` as `Comparisons`, `reports/segment_kpis_actual.csv` as `Segments` for optional exploratory tables; do not create fact-to-fact many-to-many relationships. Prefer displaying these as disconnected reporting tables.
+5. Add the measures in `measures.dax` to Customers, creating each measure separately in **Modeling > New measure**. They rely on the Customers table and its row-level assignment data, not a calculated visitors-only denominator.
+
+## Exact report layout
+
+### Page 1 — Executive Overview (16:9)
+
+- Top row: 4 Card visuals: `[Assigned Customers]`, `[Conversions]`, `[Conversion Rate]`, `[Observed Spend]`.
+- Main area: Clustered bar with `Customers[segment]` on axis; `[Conversion Rate]` as value. Secondary clustered bar for `[Spend per Assigned]`; include `[Visit Rate]` in tooltip.
+- Below: Table with `segment`, `[Assigned Customers]`, `[Conversions]`, `[Conversion Rate]`, `[Visit Rate]`, `[Spend per Assigned]`.
+- Slicers: `zip_code`, `channel`, `newbie`, `history_segment`. All are historical/pre-treatment variables. Add a strong visual warning: *"Segment filtered metrics are exploratory; do not use unfiltered p-values to claim segment significance."*
+- Text banner: *"Historical 2008 random assignment, 2-week assignment-to-email effect; no cost/margin data, not an ROI dashboard."*
+
+### Page 2 — Statistical Inference
+
+- Table visualization bound to disconnected `Comparisons`: `treatment`, `conversion_lift_pp`, `conversion_ci_low_pp`, `conversion_ci_high_pp`, `raw_conversion_p`, `holm_adjusted_conversion_p`, `holm_reject_5pct`.
+- Use a scatter/error-bar visual if supported for the CI columns (point = lift, interval endpoints = lower/upper); a custom visual must undergo independent trust/security review. Otherwise use a table, which is reliable.
+- Static text: *"Two pre-specified primary comparisons: mens vs control; womens vs control. Two-sided z-test, Holm-adjusted p. Newcombe 95% intervals are unadjusted and NOT simultaneous intervals. Primary conversion inference is for the unfiltered full dataset."*
+- Add a Card for SRM warning manually from `reports/analysis_actual.json` or create a dedicated input table; never silently declare SRM passed.
+
+### Page 3 — Customer Segments (Exploratory)
+
+- Slicers: prior channel, zip class, purchase history segment, newbie, mens prior buyer, womens prior buyer, recency.
+- Clustered columns: `Customers[segment]` on legend, `[Conversion Rate]` value, `Customers[channel]` on axis.
+- Heatmap matrix: `Customers[history_segment]` on row, `Customers[segment]` on column, `[Conversion Rate]` as value, conditional formatting by scale.
+- Show sample sizes in tables and tooltips. No statistical claims from apparent subgroup differences without multiplicity-aware interaction tests.
+
+### Page 4 — Decision & Caveats
+
+- Copy the **actual** recommendation from `reports/business_decision_memo_actual.md` only after pipeline execution.
+- Note missing delivery/open metrics, costs, margins, customer lifetime value, unsubscribes, and 2008 generalizability limitations.
+- Document gross spend estimates as experimental differences, not realized ROI.
+
+## Report verification steps (manual, not executed in this Linux environment)
+
+- Compare three arm rows in Page 1 with `reports/arm_kpis_actual.csv` (strict tolerance 0.000001).
+- Verify control denominator uses *all assigned*, not only site visitors.
+- Check each treatment's conversion lift with `reports/control_comparisons_actual.csv`.
+- Confirm filters never modify displayed overall statistical p-values without a visible warning.
+- Verify `Power BI > Refresh` works after data changes and that raw CSV is not embedded/published without usage permission.
+
+Report binary status: **NOT GENERATED / NOT VERIFIED**. Save your verified local file as `powerbi/ExperimentIQ.pbix` only after completing the steps above.
