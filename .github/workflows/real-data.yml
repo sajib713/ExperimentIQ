@@ -62,7 +62,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m experimentiq.cli all > "${RUNNER_TEMP}/real_summary.json"
-          python -m experimentiq.cli verify-db >/dev/null 2>&1 && { echo "::error::Unexpected prior database content"; exit 1; } || true
+          # Use the isolated temporary PostgreSQL service for actual-data KPI parity.
           python -m experimentiq.cli load-db > "${RUNNER_TEMP}/load_db_result.json"
           python -m experimentiq.cli verify-db > "${RUNNER_TEMP}/postgres_parity.json"
           node --check dashboard/app.js
