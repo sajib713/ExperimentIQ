@@ -1,4 +1,4 @@
-..............................s........                                  [100%]
+...................s........                                             [100%]
 =========================== short test summary info ============================
-SKIPPED [1] tests/test_postgres_integration.py:9: PostgreSQL integration unavailable: TEST_DATABASE_URL not configured
-38 passed, 1 skipped in 2.64s
+SKIPPED [1] tests/test_postgres_integration.py:10: PostgreSQL integration unavailable: TEST_DATABASE_URL not configured
+27 passed, 1 skipped in 3.56s

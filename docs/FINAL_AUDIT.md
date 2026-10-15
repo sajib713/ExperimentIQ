@@ -44,9 +44,9 @@
 
 `python -m experimentiq.cli demo` creates a clearly marked 900-row synthetic CSV and `dashboard/data/demo.json`, displayed only at `/?demo=1`. Neither output is used as the real Hillstrom source or its derived analysis. Synthetic demo outputs are **not real results**, and the dashboard makes this explicit. Four added tests verify deterministic generation, invalid inputs, source isolation and clear labeling. Local total: 38 passed, 1 PostgreSQL integration skipped.
 
-## GitHub publication blocker
+## GitHub publication status
 
-Target repository: `sajib713/ExperimentIQ` (confirmed exists; user account `sajib713` authenticated). As of 15 October 2026, connector `create_file` and `create_blob` both returned HTTP 403, `Resource not accessible by integration`; `list_installations` returned zero installations. Therefore remote source push is **BLOCKED** despite repository metadata reporting nominal push permission. This is distinct from local Git commits.
+The private target is `sajib713/ExperimentIQ`. The authenticated `sajib713` GitHub integration can now read its metadata and sees an installed GitHub App with all-repository selection. An attempted `create_blob` on the entirely empty repository returned HTTP 409 (`Git Repository is empty`), not a successful write. Direct `git push` remains inaccessible from this execution container because DNS resolution of `github.com` fails. No publication is claimed until GitHub's remote commit and repository files are verified.
 
 ## Best next action
 

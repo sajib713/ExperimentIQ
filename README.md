@@ -2,7 +2,7 @@
 
 **Production-oriented portfolio code for analytics of the Hillstrom MineThatData Email Challenge**: reproducible processing, declarative SQL KPIs, randomized-inference decision engine, honest gross-spend impact analysis, a local interactive dashboard, Power BI authoring assets, and automated tests.
 
-> **CURRENT BUILD STATUS — PARTIALLY COMPLETE / DATA BLOCKED (fixture-based tests pass; live PostgreSQL test skipped (see local run log)).** The initial execution sandbox had no outbound DNS/network to download Hillstrom CSV, no PostgreSQL/Docker server and no Windows Power BI Desktop. Therefore **no actual experimental findings, verified PostgreSQL integration or Power BI binary are claimed**. Synthetic fixture tests are exclusively unit tests, not real Hillstrom results. See `docs/FINAL_AUDIT.md`.
+> **CURRENT BUILD STATUS — PARTIALLY COMPLETE / DATA BLOCKED (38 tests passed; 1 live PostgreSQL test skipped).** The initial execution sandbox had no outbound DNS/network to download Hillstrom CSV, no PostgreSQL/Docker server and no Windows Power BI Desktop. Therefore **no actual experimental findings, verified PostgreSQL integration or Power BI binary are claimed**. Synthetic fixture tests are exclusively unit tests, not real Hillstrom results. See `docs/FINAL_AUDIT.md`.
 
 ## Why this is more than a notebook
 
