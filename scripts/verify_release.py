@@ -5,14 +5,13 @@ import shutil
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 CORE=['README.md','LICENSE','pyproject.toml','Dockerfile','docker-compose.yml','.env.example',
-'rs', 'src/experimentiq/data.py','src/experimentiq/stats.py','src/experimentiq/business.py',
+'docs/RELEASE_HARDENING.md', 'src/experimentiq/data.py','src/experimentiq/stats.py','src/experimentiq/business.py',
 'src/experimentiq/database.py','src/experimentiq/report.py','src/experimentiq/cli.py',
 'sql/001_schema.sql','sql/002_views.sql','sql/003_quality_checks.sql','dashboard/index.html',
 'dashboard/app.js','dashboard/style.css','powerbi/theme.json','powerbi/measures.dax',
 'powerbi/transform.pq','powerbi/BUILD_GUIDE.md','docs/ARCHITECTURE.md',
 'docs/DATA_SOURCES.md','docs/DATA_DICTIONARY.md','docs/KPI_SPEC.md','docs/STATISTICAL_METHOD.md',
 'docs/TROUBLESHOOTING.md','.github/workflows/ci.yml']
-CORE=[x for x in CORE if x!='rs']
 report={'core_files':{'found':[x for x in CORE if (ROOT/x).is_file()],
                      'missing':[x for x in CORE if not (ROOT/x).is_file()]},
         'raw_dataset_present':(ROOT/'data/raw/hillstrom.csv').exists(),

@@ -27,8 +27,8 @@ def test_bad_schema_rejected(toy_raw):
     with pytest.raises(DataQualityError,match='schema'): validate_raw(toy_raw.drop(columns=['spend']),expected_rows=None)
 
 def test_no_dedup_even_if_identical(toy_raw):
-    x=toy_raw.iloc[[0,0]].reset_index(drop=True)
-    assert len(clean(x,expected_rows=None))==2
+    x=toy_raw.iloc[[0,0,30,60]].reset_index(drop=True)
+    assert len(clean(x,expected_rows=None))==4
 
 def test_wrong_count_rejected(toy_raw):
     with pytest.raises(DataQualityError,match='Expected 64000'):validate_raw(toy_raw)
@@ -41,3 +41,9 @@ def test_deterministic_csv_and_sha(toy_raw,tmp_path):
     p1=run_pipeline(path,tmp_path/'out.csv',expected_rows=None);p2=run_pipeline(path,tmp_path/'out.csv',expected_rows=None)
     assert p1['processed_sha256']==p2['processed_sha256']
     assert sha256(path)==p1['raw_sha256']
+
+
+def test_missing_experimental_arm_rejected(toy_raw):
+    missing=toy_raw.loc[toy_raw.segment!='Womens E-Mail'].copy()
+    with pytest.raises(DataQualityError,match='Missing experimental arms'):
+        validate_raw(missing,expected_rows=None)

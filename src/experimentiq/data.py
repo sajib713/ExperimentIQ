@@ -1,6 +1,8 @@
 """Never silently mutate the source: every row retained; strict type checks."""
 import hashlib
 import json
+import os
+import tempfile
 import urllib.request
 from pathlib import Path
 import numpy as np
@@ -75,6 +77,8 @@ def validate_raw(frame: pd.DataFrame, expected_rows: int | None = 64000) -> dict
         if col in ('history','spend') and (v<0).any():
             errors.append(f'{col}: negative currency')
     if not df['segment'].isin(ARMS).all(): errors.append('Unknown experimental arm')
+    missing_arms=[arm for arm in ARMS if arm not in set(df['segment'].dropna())]
+    if missing_arms: errors.append(f'Missing experimental arms: {missing_arms}')
     if not df['zip_code'].isin(ZIP_CLASSES).all(): errors.append('Unknown zip_code category')
     if not df['channel'].isin(CHANNELS).all(): errors.append('Unknown channel category')
     if not df['history_segment'].astype(str).str.match(r'^[1-7]\) ').all():
@@ -110,7 +114,59 @@ def run_pipeline(raw: Path = RAW, processed: Path = PROCESSED, expected_rows: in
     profile = validate_raw(df, expected_rows=expected_rows)
     out = clean(df, expected_rows=expected_rows)
     processed.parent.mkdir(parents=True,exist_ok=True)
-    out.to_csv(processed,index=False,float_format='%.12g')
-    return {'raw_sha256':sha256(raw), 'processed_sha256':sha256(processed),
+    # Write to a temp file then atomically replace. If interrupted, the prior artifact survives.
+    fd, tmp = tempfile.mkstemp(prefix='.experimentiq-',suffix='.csv',dir=processed.parent)
+    try:
+        with os.fdopen(fd,'w',encoding='utf-8',newline='') as handle:
+            out.to_csv(handle,index=False,float_format='%.12g')
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(tmp,processed)
+    finally:
+        Path(tmp).unlink(missing_ok=True)
+    info = {'raw_sha256':sha256(raw), 'processed_sha256':sha256(processed),
             'profile':profile, 'transformations':['Added source_row_number as 1-based positional technical key',
              "Canonicalized 'Surburban' to 'Suburban' only in processed data", 'Preserved ALL input rows (no deduplication or imputation)']}
+    # The manifest prevents a stale or manually changed processed file from reaching PostgreSQL.
+    manifest = processed.with_suffix('.manifest.json')
+    fd, tmp_meta = tempfile.mkstemp(prefix='.experimentiq-',suffix='.json',dir=processed.parent)
+    try:
+        with os.fdopen(fd,'w',encoding='utf-8') as handle:
+            json.dump({'pipeline_version':1,'raw_sha256':info['raw_sha256'],
+                       'processed_sha256':info['processed_sha256'],
+                       'rows':len(out)},handle,indent=2)
+            handle.write('\n')
+            handle.flush();os.fsync(handle.fileno())
+        os.replace(tmp_meta,manifest)
+    finally:
+        Path(tmp_meta).unlink(missing_ok=True)
+    return info
+
+
+def verify_processed_input(raw:Path=RAW, processed:Path=PROCESSED,
+                           expected_rows:int|None=64000)->pd.DataFrame:
+    """Fail closed when DB input is stale, mutated, or not derived from the raw CSV."""
+    raw,processed=Path(raw),Path(processed)
+    if not processed.is_file():
+        raise FileNotFoundError(f'Validated processed CSV missing: {processed}. Run pipeline first.')
+    manifest=processed.with_suffix('.manifest.json')
+    if not manifest.is_file():
+        raise DataQualityError('Processed lineage manifest missing: rerun pipeline')
+    try:
+        meta=json.loads(manifest.read_text(encoding='utf-8'))
+    except (ValueError, OSError) as err:
+        raise DataQualityError('Invalid processed lineage manifest') from err
+    if meta.get('pipeline_version') != 1:
+        raise DataQualityError('Unsupported processing manifest version')
+    checked=clean(load_raw(raw), expected_rows=expected_rows)
+    saved=pd.read_csv(processed)
+    if meta.get('raw_sha256') != sha256(raw) or meta.get('processed_sha256') != sha256(processed):
+        raise DataQualityError('Raw or processed SHA-256 does not match lineage manifest')
+    if meta.get('rows') != len(saved):
+        raise DataQualityError('Processed manifest row count mismatch')
+    try:
+        pd.testing.assert_frame_equal(saved,checked,check_dtype=False,
+                                      check_exact=False,atol=1e-9,rtol=1e-11)
+    except AssertionError as err:
+        raise DataQualityError('Processed rows differ from validated raw-derived output') from err
+    return saved

@@ -7,6 +7,7 @@
       "Dockerfile",
       "docker-compose.yml",
       ".env.example",
+      "docs/RELEASE_HARDENING.md",
       "src/experimentiq/data.py",
       "src/experimentiq/stats.py",
       "src/experimentiq/business.py",

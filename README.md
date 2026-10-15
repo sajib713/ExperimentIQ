@@ -2,13 +2,13 @@
 
 **Production-oriented portfolio code for analytics of the Hillstrom MineThatData Email Challenge**: reproducible processing, declarative SQL KPIs, randomized-inference decision engine, honest gross-spend impact analysis, a local interactive dashboard, Power BI authoring assets, and automated tests.
 
-> **CURRENT BUILD STATUS — PARTIALLY COMPLETE / DATA BLOCKED.** The initial execution sandbox had no outbound DNS/network to download Hillstrom CSV, no PostgreSQL/Docker server and no Windows Power BI Desktop. Therefore **no actual experimental findings, verified PostgreSQL integration or Power BI binary are claimed**. Synthetic fixture tests are exclusively unit tests, not real Hillstrom results. See `docs/FINAL_AUDIT.md`.
+> **CURRENT BUILD STATUS — PARTIALLY COMPLETE / DATA BLOCKED (34 fixture-based tests passed, 1 live PostgreSQL test skipped).** The initial execution sandbox had no outbound DNS/network to download Hillstrom CSV, no PostgreSQL/Docker server and no Windows Power BI Desktop. Therefore **no actual experimental findings, verified PostgreSQL integration or Power BI binary are claimed**. Synthetic fixture tests are exclusively unit tests, not real Hillstrom results. See `docs/FINAL_AUDIT.md`.
 
 ## Why this is more than a notebook
 
-- Source immutable + fingerprinted; expected schema/64k row checks; row-preserving processing.
+- Source immutable + fingerprinted; expected schema/64k row checks; row-preserving processing; processed CSV lineage manifest and SHA/row-level checks before database loads.
 - Arm assignment kept in its original 3-category form; ITT conversions and spend divided by **all** assigned customers.
-- SQL KPI/reporting views plus Python exact-denominator parity fixture tests; actual database parity command provided.
+- SQL KPI/reporting views plus Python exact-denominator parity fixture tests; transaction-controlled replacement of the dedicated PostgreSQL table; actual database parity command provided.
 - Pre-specified *two* primary conversion vs control tests, Holm multiplicity correction, Newcombe CIs, SRM alert, spend bootstrap sensitivity.
 - Automated, evidence-gated recommendation: won't invent ROI, campaign spend or margin.
 - Responsive, zero-CDN interactive browser dashboard with metric selection, confidence interval plot and customer-segment filters.
@@ -82,7 +82,7 @@ ExperimentIQ/
 | `... load-db` | load validated processed CSV into PostgreSQL with one commit |
 | `... verify-db` | actual server-side KPI reconciliation vs Python |
 
-See [`docs/KPI_SPEC.md`](docs/KPI_SPEC.md) and [`docs/STATISTICAL_METHOD.md`](docs/STATISTICAL_METHOD.md) before interpreting any difference. If data license/provenance are disputed, remove generated external distributions. The MIT license applies to project code only.
+See [`docs/RELEASE_HARDENING.md`](docs/RELEASE_HARDENING.md), [`docs/KPI_SPEC.md`](docs/KPI_SPEC.md) and [`docs/STATISTICAL_METHOD.md`](docs/STATISTICAL_METHOD.md) before interpreting any difference. If data license/provenance are disputed, remove generated external distributions. The MIT license applies to project code only.
 
 ## What is **not** claimed
 

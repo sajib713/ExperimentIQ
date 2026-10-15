@@ -8,7 +8,10 @@ __pycache__/
 .coverage
 htmlcov/
 data/raw/*.csv
+data/raw/*.json
+data/raw/*.download
 data/processed/*.csv
+data/processed/*.json
 reports/figures/*.png
 reports/*_actual.*
 reports/profile_actual.json

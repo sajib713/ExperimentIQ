@@ -2,22 +2,25 @@
 import os
 from pathlib import Path
 import pandas as pd
-from .config import PROJECT_ROOT, PROCESSED
+from .config import PROJECT_ROOT, PROCESSED, RAW
 from .business import group_kpis
+from .data import verify_processed_input
 
 COLUMNS=['source_row_number','recency','history_segment','history','mens','womens','zip_code','newbie','channel','segment','visit','conversion','spend']
 
-def load_postgres(csv_path:Path=PROCESSED,dsn:str|None=None)->dict:
+def load_postgres(csv_path:Path=PROCESSED,dsn:str|None=None,raw_path:Path=RAW,
+                  expected_rows:int|None=64000)->dict:
     try: import psycopg
     except ImportError as exc: raise RuntimeError('Install optional dependency: pip install ".[postgres]"') from exc
     dsn=dsn or os.getenv('DATABASE_URL')
     if not dsn: raise ValueError('DATABASE_URL must be set')
-    df=pd.read_csv(csv_path)
+    df=verify_processed_input(raw=raw_path,processed=csv_path,expected_rows=expected_rows)
     if list(df.columns)!=COLUMNS: raise ValueError('Processed CSV schema mismatch')
     # Single transaction: no partial success. Temporary staging then replace within txn.
     with psycopg.connect(dsn) as conn:
         with conn.cursor() as cur:
             cur.execute((PROJECT_ROOT/'sql/001_schema.sql').read_text())
+            cur.execute('LOCK TABLE experiment_customers IN ACCESS EXCLUSIVE MODE')
             cur.execute('CREATE TEMP TABLE iq_import (LIKE experiment_customers INCLUDING ALL) ON COMMIT DROP')
             with cur.copy('COPY iq_import ('+', '.join(COLUMNS)+') FROM STDIN WITH (FORMAT CSV, HEADER TRUE)') as copy:
                 with open(csv_path,'rb') as handle:
@@ -31,12 +34,13 @@ def load_postgres(csv_path:Path=PROCESSED,dsn:str|None=None)->dict:
     return {'loaded_rows':loaded, 'status':'committed'}
 
 
-def verify_postgres(csv_path:Path=PROCESSED,dsn:str|None=None)->list[dict]:
+def verify_postgres(csv_path:Path=PROCESSED,dsn:str|None=None,raw_path:Path=RAW,
+                    expected_rows:int|None=64000)->list[dict]:
     try: import psycopg
     except ImportError as exc: raise RuntimeError('Install psycopg') from exc
     dsn=dsn or os.getenv('DATABASE_URL')
     if not dsn: raise ValueError('DATABASE_URL required')
-    df=pd.read_csv(csv_path)
+    df=verify_processed_input(raw=raw_path,processed=csv_path,expected_rows=expected_rows)
     expected=group_kpis(df).set_index('segment')
     with psycopg.connect(dsn) as conn,conn.cursor() as cur:
         cur.execute('SELECT segment,assigned,conversions,visits,spend_total,conversion_rate,visit_rate,spend_per_assigned FROM vw_arm_kpis')

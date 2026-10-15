@@ -3,7 +3,7 @@ import argparse
 import json
 import sys
 from .config import RAW,PROCESSED,REPORTS,DASHBOARD_DATA
-from .data import acquire,load_raw,run_pipeline,clean
+from .data import acquire,load_raw,run_pipeline,clean,verify_processed_input
 from .report import export_results
 from .database import load_postgres,verify_postgres
 
@@ -22,14 +22,10 @@ def main(argv=None):
             result={'raw_sha256':sha256(RAW),'profile':validate_raw(raw)}
         elif args.cmd=='pipeline': result=run_pipeline()
         elif args.cmd=='analyze':
-            from .data import sha256
             if not PROCESSED.exists(): raise FileNotFoundError('Run pipeline after obtaining real dataset first')
             if not RAW.exists(): raise FileNotFoundError('Raw dataset required for results fingerprint')
-            # Fail if stale processed artifact belongs to different raw source.
-            validation=clean(load_raw())
-            import pandas as pd
-            stored=pd.read_csv(PROCESSED)
-            pd.testing.assert_frame_equal(stored,validation,check_dtype=False,check_exact=False,atol=1e-8,rtol=1e-9)
+            # Recheck raw and processed fingerprints before publishing inference.
+            validation=verify_processed_input()
             res=export_results(validation);result={'n':res['n'],'memo':'reports/business_decision_memo_actual.md','dashboard':str(DASHBOARD_DATA)}
         elif args.cmd=='all':
             pipeline_result=run_pipeline()

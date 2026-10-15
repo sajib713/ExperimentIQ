@@ -8,7 +8,7 @@
 
 - Python 3.13.5; pandas 2.2.3; NumPy 2.3.5; SciPy 1.17.0; statsmodels 0.14.6; pytest 9.0.2; Node.js 22.16.0; Git 2.47.3.
 - PostgreSQL CLI/server: **NOT INSTALLED / NOT RUN**; Docker CLI: **NOT INSTALLED / NOT RUN**; Power BI Desktop: **NOT AVAILABLE** (Linux host).
-- `python -m pytest -q` execution: **27 passed, 1 skipped** (the skip is live PostgreSQL integration because `TEST_DATABASE_URL` was not configured). Synthetic fixture tested the data pipeline, memo exporter, dashboard JSON, statistical formulas, SQL-derived relational views in SQLite and reproducibility. These are not actual Hillstrom experimental results.
+- `python -m pytest -q` execution: **34 passed, 1 skipped** (the skip is live PostgreSQL integration because `TEST_DATABASE_URL` was not configured). Synthetic fixture tested the data pipeline, memo exporter, dashboard JSON, statistical formulas, SQL-derived relational views in SQLite and reproducibility. These are not actual Hillstrom experimental results.
 - `node --check dashboard/app.js`: **exit 0 / syntax valid**, not a verified Chromium GUI acceptance test.
 - `python -m experimentiq.cli acquire`: **exit 2** (`URLError`, DNS name resolution failure), no dataset acquired.
 - `python -m experimentiq.cli profile`: **exit 2** (`FileNotFoundError` missing source CSV).
@@ -32,13 +32,22 @@
 | Dashboard interactive visuals and source code | IMPLEMENTED / STATIC VERIFIED | `dashboard/`; JS syntax checked; real-data population pending |
 | Native Power BI `.pbix` / `.pbit` | NOT PRODUCED | Desktop unavailable; explicit M/DAX/theme/report blueprint shipped |
 | Business memo with actual findings | BLOCKED | `report.py` implementation; `reports/STATUS.md` is honest blocker report |
-| Automated test execution | COMPLETE (local fixture coverage) | pytest 27 passed, 1 skipped; test log included |
+| Automated test execution | COMPLETE (local fixture coverage) | pytest 34 passed, 1 skipped; test log included |
 | Docker PostgreSQL run verified | BLOCKED | Docker unavailable |
 | README, architecture, data dictionary, KPI, methodology | COMPLETE | `README.md`, docs files |
 | Git local repository | COMPLETE | Locally initialized and committed; no GitHub remote or deployment claimed |
 | GitHub CI workflow | CONFIGURED / NOT RUN | `.github/workflows/ci.yml`; not pushed, so no Actions run |
 | Real-data end-to-end execution | BLOCKED | Missing source CSV |
 | SQL/Python results consistent on real data | NOT VERIFIED | `verify-db` requires PostgreSQL + source; fixture view parity passed |
+
+## Security and data-integrity hardening (second local revision)
+
+- Removed explicit transaction commits from `sql/001_schema.sql` so `load_postgres()` can control one transaction, lock the replacement table, and roll back if staging or views fail. Live PostgreSQL atomicity is **not yet verified**.
+- Added a two-fingerprint raw/processed lineage manifest (`data/processed/experiment_customers.manifest.json`), atomic processed CSV writing, row-by-row checks before analysis/DB load, and fail-closed rejection of tampering/stale inputs.
+- Added missing experimental-arm check, numeric-column precision hardening, and Git ignores for raw/processed manifests.
+- Added 7 net additional fixture tests; latest command `PYTHONPATH=src python -m pytest -q`: **34 passed, 1 skipped**. The skipped case is the live PostgreSQL test.
+- Executed `node --check dashboard/app.js`, `git diff --check`, `python -m compileall -q src/ tests/` and repository presence audit: all passed. These do **not** substitute for real-data and server integration checks.
+- See [`docs/RELEASE_HARDENING.md`](RELEASE_HARDENING.md) for risk discussion and acceptance boundaries.
 
 ## Best next action
 
